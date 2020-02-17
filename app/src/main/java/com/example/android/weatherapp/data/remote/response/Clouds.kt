@@ -1,9 +1,9 @@
-package com.example.android.weatherapp.data.remote.weather
+package com.example.android.sunshine.data.remote.response
 
 
 import com.google.gson.annotations.SerializedName
 
 data class Clouds(
     @SerializedName("all")
-    var all: Int? = 0
+    val all: Int = 0
 )

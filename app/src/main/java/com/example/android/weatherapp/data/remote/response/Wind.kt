@@ -1,11 +1,11 @@
-package com.example.android.weatherapp.data.remote.weather
+package com.example.android.sunshine.data.remote.response
 
 
 import com.google.gson.annotations.SerializedName
 
 data class Wind(
     @SerializedName("deg")
-    var deg: Int? = 0,
+    val deg: Int = 0,
     @SerializedName("speed")
-    var speed: Double? = 0.0
+    val speed: Double = 0.0
 )

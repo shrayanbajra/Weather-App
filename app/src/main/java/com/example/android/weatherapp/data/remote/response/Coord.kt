@@ -1,11 +1,11 @@
-package com.example.android.weatherapp.data.remote.weather
+package com.example.android.sunshine.data.remote.response
 
 
 import com.google.gson.annotations.SerializedName
 
 data class Coord(
     @SerializedName("lat")
-    var lat: Double? = 0.0,
+    val lat: Double = 0.0,
     @SerializedName("lon")
-    var lon: Double? = 0.0
+    val lon: Double = 0.0
 )
