@@ -1,4 +1,4 @@
-package com.example.android.sunshine.data.ui
+package com.example.android.weatherapp.data.ui
 
 /**
  * Data class to be used in View

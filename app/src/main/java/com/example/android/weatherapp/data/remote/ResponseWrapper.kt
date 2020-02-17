@@ -1,4 +1,4 @@
-package com.example.android.sunshine.data.remote
+package com.example.android.weatherapp.data.remote
 
 /**
  * Response Wrapper - Wraps result from a network request
