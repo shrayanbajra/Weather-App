@@ -98,12 +98,10 @@ class HomeRepository private constructor() : BaseRepository() {
      */
     private fun transformResponseToEntity(weatherResponse: WeatherResponse?): WeatherEntity {
 
-        val weatherEntity = WeatherEntity()
-
         val decimalFormat = DecimalFormat("##")
         decimalFormat.roundingMode = RoundingMode.CEILING
 
-        weatherEntity.apply {
+        return WeatherEntity().apply {
             weatherResponse?.let {
                 location = it.name
                 weatherCondition = it.weather[0].main
@@ -114,7 +112,6 @@ class HomeRepository private constructor() : BaseRepository() {
                 imageUri = getIconFromURI(it.weather[0].icon)
             }
         }
-        return weatherEntity
     }
 
     /**
