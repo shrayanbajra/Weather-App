@@ -1,9 +1,9 @@
 package com.example.android.weatherapp.ui
 
-import com.example.android.sunshine.data.local.WeatherDao
-import com.example.android.sunshine.data.local.WeatherDatabase
-import com.example.android.sunshine.network.Api
-import com.example.android.sunshine.network.RetrofitClient
+import com.example.android.weatherapp.data.local.WeatherDao
+import com.example.android.weatherapp.data.local.WeatherDatabase
+import com.example.android.weatherapp.network.Api
+import com.example.android.weatherapp.network.RetrofitClient
 
 abstract class BaseRepository {
 

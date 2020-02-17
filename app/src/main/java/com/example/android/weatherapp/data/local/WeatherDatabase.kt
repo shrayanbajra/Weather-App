@@ -3,7 +3,7 @@ package com.example.android.weatherapp.data.local
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.android.sunshine.utils.AppUtils
+import com.example.android.weatherapp.utils.AppUtils
 
 @Database(entities = [WeatherEntity::class], version = 1, exportSchema = false)
 abstract class WeatherDatabase : RoomDatabase() {
@@ -37,11 +37,8 @@ abstract class WeatherDatabase : RoomDatabase() {
                         "weather_database"
                     ).build()
                 }
-
                 return INSTANCE!!
             }
         }
-
     }
-
 }

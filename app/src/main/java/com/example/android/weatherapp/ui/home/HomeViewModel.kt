@@ -3,10 +3,14 @@ package com.example.android.weatherapp.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.android.sunshine.data.local.WeatherEntity
-import com.example.android.sunshine.data.ui.WeatherUi
-import com.example.android.sunshine.ui.BaseViewModel
-import com.example.android.sunshine.utils.AppUtils
+import androidx.lifecycle.viewModelScope
+import com.example.android.weatherapp.data.local.WeatherEntity
+import com.example.android.weatherapp.data.ui.WeatherUi
+import com.example.android.weatherapp.ui.BaseViewModel
+import com.example.android.weatherapp.utils.AppUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeViewModel : BaseViewModel() {
 
@@ -30,9 +34,9 @@ class HomeViewModel : BaseViewModel() {
         }
 
         viewModelScope.launch {
-            async {
+            withContext(Dispatchers.Default) {
                 _weatherUpdateStatus.postValue(repository.updateWeatherInDatabase())
-            }.await()
+            }
         }
     }
 
@@ -45,25 +49,17 @@ class HomeViewModel : BaseViewModel() {
      */
     private fun transformEntityToUI(weatherEntity: WeatherEntity): WeatherUi {
 
-        val weatherUi = WeatherUi()
-
         val degreeSymbol = "\u00B0"
-
-        weatherUi.apply {
+        return WeatherUi().apply {
             weatherEntity.let {
                 location = it.location
-
                 weatherCondition = it.weatherCondition
                 weatherDescription = it.weatherDescription
-
                 temperature = it.temperature + degreeSymbol
-
                 minTemperature = it.minTemperature + degreeSymbol
                 maxTemperature = it.maxTemperature + degreeSymbol
-
                 icon = it.imageUri
             }
         }
-        return weatherUi
     }
 }
