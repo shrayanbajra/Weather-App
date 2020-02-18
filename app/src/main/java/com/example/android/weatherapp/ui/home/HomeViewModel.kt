@@ -14,12 +14,8 @@ import kotlinx.coroutines.withContext
 
 class HomeViewModel : BaseViewModel() {
 
-    private val repository by lazy {
-        HomeRepository.getInstance()
-    }
+    private val repository = HomeRepository.getInstance()
     private val _weatherEntity = repository.getWeatherLiveData()
-
-    // Transforming LiveData (Entity to UI)
     private val _weatherUI =
         Transformations.map<WeatherEntity, WeatherUi>(_weatherEntity, ::transformEntityToUI)
 
@@ -28,14 +24,18 @@ class HomeViewModel : BaseViewModel() {
     fun getWeatherLiveData() = _weatherUI
 
     fun updateWeather() {
-
         if (AppUtils.isNotConnectedToInternet()) {
             _weatherUpdateStatus.postValue(false)
+        } else {
+            fetchAndUpdateWeather()
         }
+    }
 
+    private fun fetchAndUpdateWeather() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-                _weatherUpdateStatus.postValue(repository.updateWeatherInDatabase())
+                val updateStatus = repository.fetchAndStoreWeather()
+                _weatherUpdateStatus.postValue(updateStatus)
             }
         }
     }
@@ -44,11 +44,7 @@ class HomeViewModel : BaseViewModel() {
         return _weatherUpdateStatus
     }
 
-    /**
-     * Transforming Entity to Ui
-     */
     private fun transformEntityToUI(weatherEntity: WeatherEntity): WeatherUi {
-
         val degreeSymbol = "\u00B0"
         return WeatherUi().apply {
             weatherEntity.let {

@@ -4,9 +4,7 @@ import com.example.android.weatherapp.data.remote.response.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-/**
- * Methods in API
- */
+// API Endpoints
 interface Api {
 
     @GET("weather")
@@ -15,5 +13,4 @@ interface Api {
         @Query("units") units: String,
         @Query("APPID") apiKey: String
     ): WeatherResponse
-
 }

@@ -20,6 +20,9 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var btnRefresh: Button
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel by lazy {
+        ViewModelProviders.of(this).get(HomeViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,25 +30,19 @@ class HomeActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         mappingViews()
-
-        val viewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
-
-        viewModel.getWeatherLiveData().observe(this, Observer {
-            displayData(it)
-        })
+        observeWeather()
 
         btnRefresh.setOnClickListener {
             viewModel.updateWeather()
-
-            viewModel.getWeatherUpdateStatus().observe(this, Observer { wasSuccess ->
-                if (wasSuccess) {
-                    toast("Weather Information Updated")
-                } else {
-                    toast("Unable to update Weather Information")
-                }
-            })
+            observeWeatherUpdateStatus()
         }
+    }
+
+    private fun observeWeather() {
+        viewModel.getWeatherLiveData()
+            .observe(this, Observer {
+                displayData(it)
+            })
     }
 
     private fun displayData(weatherInfo: WeatherUi) {
@@ -53,6 +50,17 @@ class HomeActivity : AppCompatActivity() {
         Glide.with(this)
             .load(weatherInfo.icon)
             .into(imgWeatherCondition)
+    }
+
+    private fun observeWeatherUpdateStatus() {
+        viewModel.getWeatherUpdateStatus()
+            .observe(this, Observer { wasSuccess ->
+                if (wasSuccess) {
+                    toast("Weather Information Updated")
+                } else {
+                    toast("Unable to update Weather Information")
+                }
+            })
     }
 
     private fun mappingViews() {

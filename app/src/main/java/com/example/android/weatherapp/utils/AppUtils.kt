@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.android.weatherapp.utils
 
 import android.app.Application
@@ -9,24 +11,12 @@ import android.net.NetworkInfo
 class AppUtils {
 
     companion object {
-
-        /**
-         * Preferences
-         */
+        // Preferences
         const val LOCATION = "Thimi"
-
-        /*
-         * Temperature
-         * For Fahrenheit use units = imperial
-         * For Celsius use units = metric
-         */
-        const val UNITS = "metric"
-
+        const val UNITS = "metric" // metric -> Celsius, imperial -> Fahrenheit
         const val API_KEY = "cedb0bc4eeb308672d3377ecf12724e9"
 
-        /**
-         * Application
-         */
+        // Application
         private lateinit var APP: Application
 
         fun init(app: Application) {
@@ -39,10 +29,9 @@ class AppUtils {
             return APP
         }
 
-        // Check network status
+        // Network Status
         fun isNotConnectedToInternet(): Boolean {
-            val cm = getApp()
-                .getSystemService(Context.CONNECTIVITY_SERVICE)
+            val cm = getApp().getSystemService(Context.CONNECTIVITY_SERVICE)
                     as ConnectivityManager
             val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
             return activeNetwork?.isConnectedOrConnecting != true

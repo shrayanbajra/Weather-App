@@ -1,8 +1,6 @@
 package com.example.android.weatherapp.data.ui
 
-/**
- * Data class to be used in View
- */
+// Data class to be used in view
 data class WeatherUi(
     var location: String = "",
     var weatherCondition: String = "",

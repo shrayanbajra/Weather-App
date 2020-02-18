@@ -16,7 +16,6 @@ import java.text.DecimalFormat
 
 class HomeRepository private constructor() : BaseRepository() {
 
-    // Instance of Repository
     companion object {
         private var instance: HomeRepository? = null
 
@@ -38,26 +37,28 @@ class HomeRepository private constructor() : BaseRepository() {
         return _weatherEntity
     }
 
-    suspend fun updateWeatherInDatabase(): Boolean {
-
+    suspend fun fetchAndStoreWeather(): Boolean {
         return withContext(Main) {
             fetchWeather()
 
             val weatherResponse = _weatherResponse.value ?: WeatherResponse()
-
 //        if (responseWrapper.isNotSuccessful()) {
 //            wasUpdateSuccessful = false
 //        }
 //
 //        val weatherResponse = responseWrapper.getResponse()
-            val weatherEntity = transformResponseToEntity(weatherResponse)
-
-            deleteWeatherFromDatabase()
-            insertWeatherIntoDatabase(weatherEntity)
-
-            _weatherEntity.postValue(getWeatherFromDatabase())
-            true
+            updateDatabase(weatherResponse)
         }
+    }
+
+    private suspend fun updateDatabase(weatherResponse: WeatherResponse): Boolean {
+        val weatherEntity = transformResponseToEntity(weatherResponse)
+
+        deleteWeatherFromDatabase()
+        insertWeatherIntoDatabase(weatherEntity)
+
+        _weatherEntity.postValue(getWeatherFromDatabase())
+        return true
     }
 
     // Database Operations

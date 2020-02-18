@@ -3,9 +3,6 @@ package com.example.android.weatherapp.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/**
- * Weather Table
- */
 @Entity(tableName = "weather_table")
 data class WeatherEntity(
 
@@ -18,5 +15,4 @@ data class WeatherEntity(
     var maxTemperature: String = "",
     var isRecent: Boolean = false,
     var imageUri: String = ""
-
 )

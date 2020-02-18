@@ -1,8 +1,6 @@
 package com.example.android.weatherapp.data.remote
 
-/**
- * Response Wrapper - Wraps result from a network request
- */
+// Response Wrapper - Wraps result from a network request
 data class ResponseWrapper<O>(
     private var isSuccessful: Boolean = false,
     private var errorMessage: String = "",
