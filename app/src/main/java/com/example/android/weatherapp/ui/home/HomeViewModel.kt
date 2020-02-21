@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.ui.BaseViewModel
+import com.example.android.weatherapp.ui.StatusWrapper
 import com.example.android.weatherapp.utils.AppUtils
 import kotlinx.coroutines.launch
 
@@ -14,7 +15,7 @@ class HomeViewModel : BaseViewModel() {
 
     private val repository: HomeRepository = HomeRepository.getInstance()
     private val _weatherEntity: LiveData<WeatherEntity> = repository.getWeatherLiveData()
-    private val _weatherUpdateStatus = MutableLiveData<Boolean>()
+    private val _weatherUpdateStatus = MutableLiveData<StatusWrapper>()
 
     fun getWeatherLiveData() = transformLiveDataForUI()
 
@@ -24,24 +25,42 @@ class HomeViewModel : BaseViewModel() {
 
     fun updateWeather() {
         if (AppUtils.isNotConnectedToInternet()) {
-            _weatherUpdateStatus.postValue(false)
+            prepareStatusForNoInternet()
         } else {
             fetchAndUpdateWeather()
         }
     }
 
+    private fun prepareStatusForNoInternet() {
+        val statusWrapper = StatusWrapper()
+        statusWrapper.prepareFailure("No Internet Connection")
+        _weatherUpdateStatus.postValue(statusWrapper)
+    }
+
     private fun fetchAndUpdateWeather() {
         viewModelScope.launch {
             try {
-                val updateStatus: Boolean = repository.fetchAndStoreWeather()
-                _weatherUpdateStatus.postValue(updateStatus)
+                repository.fetchAndStoreWeather()
+                prepareStatusForSuccessfulResponse()
             } catch (exception: Exception) {
-                _weatherUpdateStatus.postValue(false)
+                prepareStatusForFailureResponse()
             }
         }
     }
 
-    fun getWeatherUpdateStatus(): LiveData<Boolean> {
+    private fun prepareStatusForSuccessfulResponse() {
+        val statusWrapper = StatusWrapper()
+        statusWrapper.prepareSuccess("Weather Updated")
+        _weatherUpdateStatus.postValue(statusWrapper)
+    }
+
+    private fun prepareStatusForFailureResponse() {
+        val statusWrapper = StatusWrapper()
+        statusWrapper.prepareFailure("Could not retrieve data from server")
+        _weatherUpdateStatus.postValue(statusWrapper)
+    }
+
+    fun getWeatherUpdateStatus(): LiveData<StatusWrapper> {
         return _weatherUpdateStatus
     }
 

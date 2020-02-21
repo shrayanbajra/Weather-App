@@ -36,7 +36,7 @@ class HomeRepository private constructor() : BaseRepository() {
         return _weatherEntity
     }
 
-    suspend fun fetchAndStoreWeather(): Boolean {
+    suspend fun fetchAndStoreWeather() {
         return withContext(Main) {
             fetchWeather()
             val weatherResponse = _weatherResponse.value ?: WeatherResponse()
@@ -44,14 +44,13 @@ class HomeRepository private constructor() : BaseRepository() {
         }
     }
 
-    private suspend fun updateDatabase(weatherResponse: WeatherResponse): Boolean {
+    private suspend fun updateDatabase(weatherResponse: WeatherResponse) {
         val weatherEntity = transformResponseToEntity(weatherResponse)
 
         deleteWeatherFromDatabase()
         insertWeatherIntoDatabase(weatherEntity)
 
         _weatherEntity.postValue(getWeatherFromDatabase())
-        return true
     }
 
     // Database Operations

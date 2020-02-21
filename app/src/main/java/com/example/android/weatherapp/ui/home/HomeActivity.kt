@@ -57,11 +57,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun observeWeatherUpdateStatus() {
         viewModel.getWeatherUpdateStatus()
-            .observe(this, Observer { wasSuccess ->
-                if (wasSuccess) {
-                    toast("Weather Information Updated")
+            .observe(this, Observer {
+                if (it.wasSuccessful()) {
+                    toast(it.getMessage())
                 } else {
-                    toast("Unable to update Weather Information")
+                    toast(it.getMessage())
                 }
             })
     }
