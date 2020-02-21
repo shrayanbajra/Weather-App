@@ -31,11 +31,7 @@ class HomeActivity : AppCompatActivity() {
 
         mappingViews()
         observeWeather()
-
-        btnRefresh.setOnClickListener {
-            viewModel.updateWeather()
-            observeWeatherUpdateStatus()
-        }
+        refreshWeather()
     }
 
     private fun observeWeather() {
@@ -43,6 +39,13 @@ class HomeActivity : AppCompatActivity() {
             .observe(this, Observer {
                 displayData(it)
             })
+    }
+
+    private fun refreshWeather() {
+        btnRefresh.setOnClickListener {
+            viewModel.updateWeather()
+            observeWeatherUpdateStatus()
+        }
     }
 
     private fun displayData(weatherInfo: WeatherUi) {

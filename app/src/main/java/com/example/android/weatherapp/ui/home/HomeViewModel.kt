@@ -8,9 +8,7 @@ import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.ui.BaseViewModel
 import com.example.android.weatherapp.utils.AppUtils
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeViewModel : BaseViewModel() {
 
@@ -33,9 +31,11 @@ class HomeViewModel : BaseViewModel() {
 
     private fun fetchAndUpdateWeather() {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            try {
                 val updateStatus = repository.fetchAndStoreWeather()
                 _weatherUpdateStatus.postValue(updateStatus)
+            } catch (exception: Exception) {
+                _weatherUpdateStatus.postValue(false)
             }
         }
     }

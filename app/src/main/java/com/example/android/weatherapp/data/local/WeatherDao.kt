@@ -12,10 +12,10 @@ import androidx.room.Query
 interface WeatherDao {
 
     @Query("SELECT * FROM weather_table")
-    suspend fun getWeatherInfoFromDatabase(): WeatherEntity
+    suspend fun getWeatherFromDatabase(): WeatherEntity
 
     @Query("SELECT * FROM weather_table WHERE location = :location")
-    suspend fun getWeatherfor(location: String): WeatherEntity?
+    suspend fun getWeatherFor(location: String): WeatherEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWeatherIntoDatabase(weatherEntity: WeatherEntity)

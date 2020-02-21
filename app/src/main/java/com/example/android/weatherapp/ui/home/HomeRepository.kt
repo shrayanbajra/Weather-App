@@ -18,7 +18,6 @@ class HomeRepository private constructor() : BaseRepository() {
 
     companion object {
         private var instance: HomeRepository? = null
-
         fun getInstance() = instance ?: HomeRepository()
     }
 
@@ -28,8 +27,8 @@ class HomeRepository private constructor() : BaseRepository() {
     private val _weatherResponse = MutableLiveData<WeatherResponse>()
 
     init {
-        CoroutineScope(Main).launch {
-            _weatherEntity.value = getWeatherFromDatabase()
+        CoroutineScope(Dispatchers.Default).launch {
+            _weatherEntity.postValue(getWeatherFromDatabase())
         }
     }
 
@@ -40,13 +39,7 @@ class HomeRepository private constructor() : BaseRepository() {
     suspend fun fetchAndStoreWeather(): Boolean {
         return withContext(Main) {
             fetchWeather()
-
             val weatherResponse = _weatherResponse.value ?: WeatherResponse()
-//        if (responseWrapper.isNotSuccessful()) {
-//            wasUpdateSuccessful = false
-//        }
-//
-//        val weatherResponse = responseWrapper.getResponse()
             updateDatabase(weatherResponse)
         }
     }
@@ -70,7 +63,7 @@ class HomeRepository private constructor() : BaseRepository() {
 
     private suspend fun getWeatherFromDatabase(): WeatherEntity {
         return withContext(Dispatchers.IO) {
-            weatherDao.getWeatherfor(AppUtils.LOCATION) ?: WeatherEntity()
+            weatherDao.getWeatherFor(AppUtils.LOCATION) ?: WeatherEntity()
         }
     }
 
@@ -80,12 +73,10 @@ class HomeRepository private constructor() : BaseRepository() {
         }
     }
 
-    /**
-     * Network Request
-     */
+    // Network Request
     private suspend fun fetchWeather() {
         withContext(Dispatchers.IO) {
-            val weatherResponse = getNetworkClient().getWeatherResponse(
+            val weatherResponse: WeatherResponse = getNetworkClient().getWeatherResponse(
                 AppUtils.LOCATION,
                 AppUtils.UNITS,
                 AppUtils.API_KEY
@@ -94,30 +85,26 @@ class HomeRepository private constructor() : BaseRepository() {
         }
     }
 
-    /**
-     * Transforming Response to Entity
-     */
+    // Transforming Response to Entity
     private fun transformResponseToEntity(weatherResponse: WeatherResponse?): WeatherEntity {
 
         val decimalFormat = DecimalFormat("##")
         decimalFormat.roundingMode = RoundingMode.CEILING
 
         return WeatherEntity().apply {
-            weatherResponse?.let {
-                location = it.name
-                weatherCondition = it.weather[0].main
-                weatherDescription = it.weather[0].description
-                temperature = decimalFormat.format(it.main.temp).toString()
-                minTemperature = decimalFormat.format(it.main.tempMin).toString()
-                maxTemperature = decimalFormat.format(it.main.tempMax).toString()
-                imageUri = getIconFromURI(it.weather[0].icon)
+            weatherResponse?.let { response ->
+                location = response.name
+                weatherCondition = response.weather[0].main
+                weatherDescription = response.weather[0].description
+                temperature = decimalFormat.format(response.main.temp).toString()
+                minTemperature = decimalFormat.format(response.main.tempMin).toString()
+                maxTemperature = decimalFormat.format(response.main.tempMax).toString()
+                imageUri = getIconFromURI(response.weather[0].icon)
             }
         }
     }
 
-    /**
-     * Retrieving icon for Weather Condition
-     */
+    // Retrieving icon for Weather Condition
     private fun getIconFromURI(icon: String): String {
         return String.format("https://api.openweathermap.org/img/w/%s.png", icon)
     }
