@@ -1,35 +1,54 @@
 package com.example.android.weatherapp.ui.home
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
-import com.example.android.weatherapp.databinding.ActivityMainBinding
-import org.jetbrains.anko.toast
+import com.example.android.weatherapp.databinding.FragmentHomeBinding
 
-class HomeActivity : AppCompatActivity() {
+class HomeFragment : Fragment() {
 
     // Views
     private lateinit var imgWeatherCondition: ImageView
     private lateinit var btnRefresh: Button
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        return binding.root
+    }
 
-        mappingViews()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mappingViews(view)
+    }
+
+    private fun mappingViews(view: View) {
+        imgWeatherCondition = view.findViewById(R.id.img_weather_icon)
+        btnRefresh = view.findViewById(R.id.btn_refresh)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
         observeWeather()
         refreshWeather()
     }
@@ -58,16 +77,7 @@ class HomeActivity : AppCompatActivity() {
     private fun observeWeatherUpdateStatus() {
         viewModel.getWeatherUpdateStatus()
             .observe(this, Observer {
-                if (it.wasSuccessful()) {
-                    toast(it.getMessage())
-                } else {
-                    toast(it.getMessage())
-                }
+                Toast.makeText(activity, it.getMessage(), Toast.LENGTH_SHORT).show()
             })
-    }
-
-    private fun mappingViews() {
-        imgWeatherCondition = findViewById(R.id.img_weather_icon)
-        btnRefresh = findViewById(R.id.btn_refresh)
     }
 }

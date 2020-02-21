@@ -1,6 +1,6 @@
 package com.example.android.weatherapp.ui
 
-data class StatusWrapper(
+data class DataWrapper(
     private var status: Boolean = false,
     private var message: String = ""
 ) {
