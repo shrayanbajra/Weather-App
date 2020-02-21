@@ -13,4 +13,9 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="AppTheme.TransparentTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
 </resources>

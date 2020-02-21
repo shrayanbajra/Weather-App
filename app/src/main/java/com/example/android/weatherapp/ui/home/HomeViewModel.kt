@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
+import com.example.android.weatherapp.core.BaseViewModel
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
-import com.example.android.weatherapp.ui.BaseViewModel
 import com.example.android.weatherapp.ui.StatusWrapper
 import com.example.android.weatherapp.utils.AppUtils
 import kotlinx.coroutines.launch
