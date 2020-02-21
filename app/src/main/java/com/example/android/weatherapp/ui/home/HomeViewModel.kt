@@ -12,14 +12,15 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : BaseViewModel() {
 
-    private val repository = HomeRepository.getInstance()
-    private val _weatherEntity = repository.getWeatherLiveData()
-    private val _weatherUI =
-        Transformations.map<WeatherEntity, WeatherUi>(_weatherEntity, ::transformEntityToUI)
-
+    private val repository: HomeRepository = HomeRepository.getInstance()
+    private val _weatherEntity: LiveData<WeatherEntity> = repository.getWeatherLiveData()
     private val _weatherUpdateStatus = MutableLiveData<Boolean>()
 
-    fun getWeatherLiveData() = _weatherUI
+    fun getWeatherLiveData() = transformLiveDataForUI()
+
+    private fun transformLiveDataForUI(): LiveData<WeatherUi> {
+        return Transformations.map<WeatherEntity, WeatherUi>(_weatherEntity, ::transformEntityToUI)
+    }
 
     fun updateWeather() {
         if (AppUtils.isNotConnectedToInternet()) {
@@ -32,7 +33,7 @@ class HomeViewModel : BaseViewModel() {
     private fun fetchAndUpdateWeather() {
         viewModelScope.launch {
             try {
-                val updateStatus = repository.fetchAndStoreWeather()
+                val updateStatus: Boolean = repository.fetchAndStoreWeather()
                 _weatherUpdateStatus.postValue(updateStatus)
             } catch (exception: Exception) {
                 _weatherUpdateStatus.postValue(false)

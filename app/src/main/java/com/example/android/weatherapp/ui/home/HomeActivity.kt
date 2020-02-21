@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
@@ -20,8 +20,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var btnRefresh: Button
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by lazy {
-        ViewModelProviders.of(this).get(HomeViewModel::class.java)
+    private val viewModel: HomeViewModel by lazy {
+        ViewModelProvider(this).get(HomeViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
