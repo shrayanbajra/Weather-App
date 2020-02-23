@@ -7,8 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.example.android.weatherapp.R
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_nav_host.*
 
 class NavHostActivity : AppCompatActivity() {
 
@@ -29,25 +33,31 @@ class NavHostActivity : AppCompatActivity() {
             R.string.open_navigation_drawer,
             R.string.close_navigation_drawer
         )
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
 
+        initNavController()
+    }
+
+    private fun initNavController() {
+        val navController: NavController =
+            Navigation.findNavController(this, R.id.navHostActivity)
+        NavigationUI.setupActionBarWithNavController(this, navController, drawer)
+        NavigationUI.setupWithNavController(toolbar, navController, drawer)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_settings -> {
                     Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT)
                         .show()
-                    // TODO: Need to navigate to settings fragment
+                    navController.navigate(R.id.action_homeFragment_to_settingsFragment)
                     drawer.closeDrawer(GravityCompat.START)
                     true
                 }
                 else -> false
             }
         }
-
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
     }
-
 
     override fun onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {

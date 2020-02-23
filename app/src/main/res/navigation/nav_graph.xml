@@ -10,18 +10,23 @@
         android:name="com.example.android.weatherapp.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
+
         <action
             android:id="@+id/action_homeFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.android.weatherapp.ui.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+
     <activity
         android:id="@+id/navHostActivity"
         android:name="com.example.android.weatherapp.ui.NavHostActivity"
         android:label="activity_nav_host"
         tools:layout="@layout/activity_nav_host" />
+
 </navigation>
