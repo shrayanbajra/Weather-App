@@ -23,9 +23,18 @@ class NavHostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav_host)
 
+        initToolbar()
+        initDrawer()
+        initNavController()
+        initNavigationView()
+    }
+
+    private fun initToolbar() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+    }
 
+    private fun initDrawer() {
         drawer = findViewById(R.id.drawer_layout)
 
         val toggle = ActionBarDrawerToggle(
@@ -36,31 +45,35 @@ class NavHostActivity : AppCompatActivity() {
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
-
-        initNavController()
     }
 
     private fun initNavController() {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawer)
         NavigationUI.setupWithNavController(toolbar, navController, drawer)
+    }
+
+    private fun initNavigationView() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_settings -> {
-                    var isDestinationValid = false
-                    if (isValidDestination(R.id.settingsFragment)) {
-                        Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT)
-                            .show()
-                        navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-                        drawer.closeDrawer(GravityCompat.START)
-                        isDestinationValid = true
-                    }
-                    isDestinationValid
+                    navigateToSettingsFragment()
                 }
                 else -> false
             }
         }
+    }
+
+    private fun navigateToSettingsFragment(): Boolean {
+        var isDestinationValid = false
+        if (isValidDestination(R.id.settingsFragment)) {
+            Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT).show()
+            navController.navigate(R.id.action_homeFragment_to_settingsFragment)
+            drawer.closeDrawer(GravityCompat.START)
+            isDestinationValid = true
+        }
+        return isDestinationValid
     }
 
     private fun isValidDestination(destination: Int): Boolean {
