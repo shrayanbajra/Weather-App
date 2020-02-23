@@ -36,6 +36,8 @@ class NavHostActivity : AppCompatActivity() {
                 R.id.nav_settings -> {
                     Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT)
                         .show()
+                    // TODO: Need to navigate to settings fragment
+                    drawer.closeDrawer(GravityCompat.START)
                     true
                 }
                 else -> false
