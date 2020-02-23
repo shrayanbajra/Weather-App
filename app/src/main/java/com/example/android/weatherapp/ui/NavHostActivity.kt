@@ -41,7 +41,7 @@ class NavHostActivity : AppCompatActivity() {
 
     private fun initNavController() {
         val navController: NavController =
-            Navigation.findNavController(this, R.id.navHostActivity)
+            Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawer)
         NavigationUI.setupWithNavController(toolbar, navController, drawer)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
