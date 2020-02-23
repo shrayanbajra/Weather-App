@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_nav_host.*
 class NavHostActivity : AppCompatActivity() {
 
     private lateinit var drawer: DrawerLayout
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,23 +41,30 @@ class NavHostActivity : AppCompatActivity() {
     }
 
     private fun initNavController() {
-        val navController: NavController =
-            Navigation.findNavController(this, R.id.nav_host_fragment)
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawer)
         NavigationUI.setupWithNavController(toolbar, navController, drawer)
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_settings -> {
-                    Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT)
-                        .show()
-                    navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-                    drawer.closeDrawer(GravityCompat.START)
-                    true
+                    var isDestinationValid = false
+                    if (isValidDestination(R.id.settingsFragment)) {
+                        Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT)
+                            .show()
+                        navController.navigate(R.id.action_homeFragment_to_settingsFragment)
+                        drawer.closeDrawer(GravityCompat.START)
+                        isDestinationValid = true
+                    }
+                    isDestinationValid
                 }
                 else -> false
             }
         }
+    }
+
+    private fun isValidDestination(destination: Int): Boolean {
+        return destination != navController.currentDestination?.id
     }
 
     override fun onBackPressed() {
