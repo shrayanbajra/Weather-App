@@ -2,4 +2,7 @@
     <string name="app_name">Weather App</string>
     <string name="weather_condition">Weather Condition</string>
     <string name="settings">Settings</string>
+
+    <string name="open_navigation_drawer">Open Navigation Drawer</string>
+    <string name="close_navigation_drawer">Close Navigation Drawer</string>
 </resources>
