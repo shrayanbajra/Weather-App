@@ -8,11 +8,11 @@ import com.example.android.weatherapp.core.BaseRepository
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.remote.response.WeatherResponse
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -29,49 +29,45 @@ class HomeRepository private constructor() : BaseRepository() {
 
     init {
         CoroutineScope(Main).launch {
-            val weatherEntity = async(IO) { getCurrentWeatherFromDatabase() }
+            val weatherEntity = async { getCurrentWeatherFromDatabase() }
             _weatherEntity.value = weatherEntity.await()
         }
     }
 
     fun getCurrentWeatherLiveData() = _weatherEntity as LiveData<WeatherEntity>
 
-    fun fetchAndStoreCurrentWeather() {
-        CoroutineScope(Default).launch {
-            val weatherResponse = async(IO) {
-                fetchCurrentWeatherFromNetwork()
-            }
-            Log.d("HomeRepo", "response ld value -> $weatherResponse")
-            updateDatabase(weatherResponse.await())
-        }
+    suspend fun fetchAndStoreCurrentWeather() {
+        val weatherResponse = fetchCurrentWeatherFromNetwork()
+        Log.d("HomeRepo", "response ld value -> $weatherResponse")
+        updateDatabase(weatherResponse)
     }
 
     private suspend fun updateDatabase(weatherResponse: WeatherResponse) {
-        CoroutineScope(Main).launch {
-            async(IO) { deleteWeathersFromDatabase() }.await()
-            async(IO) {
-                val weatherEntity = transformResponseToEntity(weatherResponse)
-                insertCurrentWeatherIntoDatabase(weatherEntity)
-            }.await()
-            val weatherEntityFromDatabase = async(IO) {
-                getCurrentWeatherFromDatabase()
-            }.await()
-            _weatherEntity.value = weatherEntityFromDatabase
-        }
+        deleteWeathersFromDatabase()
+        val weatherEntity = transformResponseToEntity(weatherResponse)
+        insertCurrentWeatherIntoDatabase(weatherEntity)
+        val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
+        _weatherEntity.value = weatherEntityFromDatabase
         Log.d("HomeRepo", "entity ld value -> ${getCurrentWeatherFromDatabase()}")
     }
 
     // Database Operations
     private suspend fun insertCurrentWeatherIntoDatabase(weatherEntity: WeatherEntity) {
-        weatherDao.insertCurrentWeatherIntoDatabase(weatherEntity)
+        withContext(IO) {
+            weatherDao.insertCurrentWeatherIntoDatabase(weatherEntity)
+        }
     }
 
     private suspend fun getCurrentWeatherFromDatabase(): WeatherEntity {
-        return weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION) ?: WeatherEntity()
+        return withContext(IO) {
+            weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION) ?: WeatherEntity()
+        }
     }
 
     private suspend fun deleteWeathersFromDatabase() {
-        weatherDao.deleteWeathersFromDatabase()
+        withContext(IO) {
+            weatherDao.deleteWeathersFromDatabase()
+        }
     }
 
     // Network Request
