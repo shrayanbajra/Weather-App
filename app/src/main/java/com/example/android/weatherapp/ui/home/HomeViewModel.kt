@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : BaseViewModel() {
 
-    private val repository: HomeRepository = HomeRepository.getInstance()
-    private val _weatherEntity: LiveData<WeatherEntity> = repository.getWeatherLiveData()
+    private val repository = HomeRepository.getInstance()
+    private val _weatherEntity = repository.getWeatherLiveData()
     private val _weatherUpdateStatus = MutableLiveData<DataWrapper>()
 
     fun getWeatherLiveData() = transformLiveDataForUI()
@@ -67,14 +67,14 @@ class HomeViewModel : BaseViewModel() {
     private fun transformEntityToUI(weatherEntity: WeatherEntity): WeatherUi {
         val degreeSymbol = "\u00B0"
         return WeatherUi().apply {
-            weatherEntity.let {
-                location = it.location
-                weatherCondition = it.weatherCondition
-                weatherDescription = it.weatherDescription
-                temperature = it.temperature + degreeSymbol
-                minTemperature = it.minTemperature + degreeSymbol
-                maxTemperature = it.maxTemperature + degreeSymbol
-                icon = it.imageUri
+            weatherEntity.let { entity ->
+                location = entity.location
+                weatherCondition = entity.weatherCondition
+                weatherDescription = entity.weatherDescription
+                temperature = entity.temperature + degreeSymbol
+                minTemperature = entity.minTemperature + degreeSymbol
+                maxTemperature = entity.maxTemperature + degreeSymbol
+                icon = entity.imageUri
             }
         }
     }

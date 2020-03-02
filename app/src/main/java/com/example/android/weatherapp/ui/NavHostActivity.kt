@@ -38,10 +38,8 @@ class NavHostActivity : AppCompatActivity() {
         drawer = findViewById(R.id.drawer_layout)
 
         val toggle = ActionBarDrawerToggle(
-            this,
-            drawer,
-            R.string.open_navigation_drawer,
-            R.string.close_navigation_drawer
+            this, drawer,
+            R.string.open_navigation_drawer, R.string.close_navigation_drawer
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
@@ -57,9 +55,7 @@ class NavHostActivity : AppCompatActivity() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_settings -> {
-                    navigateToSettingsFragment()
-                }
+                R.id.nav_settings -> navigateToSettingsFragment()
                 else -> false
             }
         }

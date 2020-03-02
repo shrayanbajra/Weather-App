@@ -76,15 +76,12 @@ class HomeRepository private constructor() : BaseRepository() {
     private suspend fun fetchWeather() {
         withContext(Dispatchers.IO) {
             val weatherResponse: WeatherResponse = getNetworkClient().getWeatherResponse(
-                AppUtils.LOCATION,
-                AppUtils.UNITS,
-                AppUtils.API_KEY
+                AppUtils.LOCATION, AppUtils.UNITS, AppUtils.API_KEY
             )
             _weatherResponse.postValue(weatherResponse)
         }
     }
 
-    // Transforming Response to Entity
     private fun transformResponseToEntity(weatherResponse: WeatherResponse?): WeatherEntity {
 
         val decimalFormat = DecimalFormat("##")

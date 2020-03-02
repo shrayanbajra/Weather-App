@@ -23,7 +23,7 @@ class HomeFragment : Fragment() {
     private lateinit var btnRefresh: Button
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by lazy {
+    private val viewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
     }
 
@@ -54,10 +54,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeWeather() {
-        viewModel.getWeatherLiveData()
-            .observe(this, Observer {
-                displayData(it)
-            })
+        viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer { weatherInfo ->
+            displayData(weatherInfo)
+        })
     }
 
     private fun refreshWeather() {
@@ -75,9 +74,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeWeatherUpdateStatus() {
-        viewModel.getWeatherUpdateStatus()
-            .observe(this, Observer {
-                Toast.makeText(activity, it.getMessage(), Toast.LENGTH_SHORT).show()
-            })
+        viewModel.getWeatherUpdateStatus().observe(viewLifecycleOwner, Observer {
+            Toast.makeText(activity, it.getMessage(), Toast.LENGTH_SHORT).show()
+        })
     }
 }

@@ -4,7 +4,6 @@ data class DataWrapper(
     private var status: Boolean = false,
     private var message: String = ""
 ) {
-
     fun prepareSuccess(successMessage: String) {
         status = true
         message = successMessage
