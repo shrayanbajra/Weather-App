@@ -6,7 +6,11 @@
     <string name="open_navigation_drawer">Open Navigation Drawer</string>
     <string name="close_navigation_drawer">Close Navigation Drawer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="icon_representing_current_weather">Icon representing current weather</string>
+
+    <string-array name="units_preference">
+        <item>Metric</item>
+        <item>Imperial</item>
+    </string-array>
 </resources>
