@@ -99,7 +99,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         sharedPreferences?.let {
             if (sharedPrefKey == "pref_units") {
                 val units = sharedPreferences.getString("pref_units", "")
-                Toast.makeText(activity?.applicationContext, units, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity?.applicationContext, "$units selected", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

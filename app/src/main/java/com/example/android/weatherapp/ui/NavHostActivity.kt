@@ -1,7 +1,6 @@
 package com.example.android.weatherapp.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -63,7 +62,6 @@ class NavHostActivity : AppCompatActivity() {
     private fun navigateToSettingsFragment(): Boolean {
         var isValidDestination = false
         if (isDestinationValid(R.id.settingsFragment)) {
-            Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT).show()
             navController.navigate(R.id.action_homeFragment_to_settingsFragment)
             drawer.closeDrawer(GravityCompat.START)
             isValidDestination = true
