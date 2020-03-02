@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
+import com.example.android.weatherapp.utils.NetworkUtils
 
 class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -72,9 +73,16 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun refreshCurrentWeather() {
         swipeRefreshListener.setOnRefreshListener {
-            showProgressBar()
-            viewModel.updateWeather()
-            observeWeatherUpdateStatus()
+            if (NetworkUtils.hasNoInternetConnection()) {
+                Toast.makeText(
+                    activity?.applicationContext,
+                    "No Internet Connection",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                showProgressBar()
+                viewModel.updateWeather()
+            }
             swipeRefreshListener.isRefreshing = false
         }
     }
@@ -84,13 +92,6 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         Glide.with(this)
             .load(weatherInfo.icon)
             .into(imgWeatherCondition)
-    }
-
-    private fun observeWeatherUpdateStatus() {
-        viewModel.getWeatherUpdateStatus().observe(viewLifecycleOwner, Observer {
-            hideProgressBar()
-            Toast.makeText(activity, it.getMessage(), Toast.LENGTH_SHORT).show()
-        })
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
