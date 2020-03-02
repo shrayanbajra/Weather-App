@@ -1,5 +1,6 @@
 package com.example.android.weatherapp.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.weatherapp.core.BaseRepository
@@ -7,10 +8,11 @@ import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.remote.response.WeatherResponse
 import com.example.android.weatherapp.utils.AppUtils
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -24,66 +26,62 @@ class HomeRepository private constructor() : BaseRepository() {
     // Dao and LiveData
     private val weatherDao = getWeatherDaoInstance()
     private val _weatherEntity = MutableLiveData<WeatherEntity>()
-    private val _weatherResponse = MutableLiveData<WeatherResponse>()
 
     init {
-        CoroutineScope(Dispatchers.Default).launch {
-            _weatherEntity.postValue(getWeatherFromDatabase())
+        CoroutineScope(Main).launch {
+            val weatherEntity = async(IO) { getCurrentWeatherFromDatabase() }
+            _weatherEntity.value = weatherEntity.await()
         }
     }
 
-    fun getWeatherLiveData(): LiveData<WeatherEntity> {
-        return _weatherEntity
-    }
+    fun getCurrentWeatherLiveData() = _weatherEntity as LiveData<WeatherEntity>
 
-    suspend fun fetchAndStoreWeather() {
-        return withContext(Main) {
-            fetchWeather()
-            val weatherResponse = _weatherResponse.value ?: WeatherResponse()
-            updateDatabase(weatherResponse)
+    fun fetchAndStoreCurrentWeather() {
+        CoroutineScope(Default).launch {
+            val weatherResponse = async(IO) {
+                fetchCurrentWeatherFromNetwork()
+            }
+            Log.d("HomeRepo", "response ld value -> $weatherResponse")
+            updateDatabase(weatherResponse.await())
         }
     }
 
     private suspend fun updateDatabase(weatherResponse: WeatherResponse) {
-        val weatherEntity = transformResponseToEntity(weatherResponse)
-
-        deleteWeatherFromDatabase()
-        insertWeatherIntoDatabase(weatherEntity)
-
-        _weatherEntity.postValue(getWeatherFromDatabase())
+        CoroutineScope(Main).launch {
+            async(IO) { deleteWeathersFromDatabase() }.await()
+            async(IO) {
+                val weatherEntity = transformResponseToEntity(weatherResponse)
+                insertCurrentWeatherIntoDatabase(weatherEntity)
+            }.await()
+            val weatherEntityFromDatabase = async(IO) {
+                getCurrentWeatherFromDatabase()
+            }.await()
+            _weatherEntity.value = weatherEntityFromDatabase
+        }
+        Log.d("HomeRepo", "entity ld value -> ${getCurrentWeatherFromDatabase()}")
     }
 
     // Database Operations
-    private suspend fun insertWeatherIntoDatabase(weatherEntity: WeatherEntity) {
-        withContext(Dispatchers.IO) {
-            weatherDao.insertWeatherIntoDatabase(weatherEntity)
-        }
+    private suspend fun insertCurrentWeatherIntoDatabase(weatherEntity: WeatherEntity) {
+        weatherDao.insertCurrentWeatherIntoDatabase(weatherEntity)
     }
 
-    private suspend fun getWeatherFromDatabase(): WeatherEntity {
-        return withContext(Dispatchers.IO) {
-            weatherDao.getWeatherFor(AppUtils.LOCATION) ?: WeatherEntity()
-        }
+    private suspend fun getCurrentWeatherFromDatabase(): WeatherEntity {
+        return weatherDao.getCurrentWeatherFor(AppUtils.LOCATION) ?: WeatherEntity()
     }
 
-    private suspend fun deleteWeatherFromDatabase() {
-        withContext(Dispatchers.IO) {
-            weatherDao.deleteWeatherFromDatabase()
-        }
+    private suspend fun deleteWeathersFromDatabase() {
+        weatherDao.deleteWeathersFromDatabase()
     }
 
     // Network Request
-    private suspend fun fetchWeather() {
-        withContext(Dispatchers.IO) {
-            val weatherResponse: WeatherResponse = getNetworkClient().getWeatherResponse(
-                AppUtils.LOCATION, AppUtils.UNITS, AppUtils.API_KEY
-            )
-            _weatherResponse.postValue(weatherResponse)
-        }
+    private suspend fun fetchCurrentWeatherFromNetwork(): WeatherResponse {
+        return getNetworkClient().getWeatherResponse(
+            AppUtils.LOCATION, AppUtils.UNITS, AppUtils.API_KEY
+        )
     }
 
     private fun transformResponseToEntity(weatherResponse: WeatherResponse?): WeatherEntity {
-
         val decimalFormat = DecimalFormat("##")
         decimalFormat.roundingMode = RoundingMode.CEILING
 

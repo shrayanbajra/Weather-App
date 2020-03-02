@@ -1,6 +1,7 @@
 package com.example.android.weatherapp.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,10 +39,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mappingViews(view)
+        initViews(view)
     }
 
-    private fun mappingViews(view: View) {
+    private fun initViews(view: View) {
         imgWeatherCondition = view.findViewById(R.id.img_weather_icon)
         btnRefresh = view.findViewById(R.id.btn_refresh)
     }
@@ -56,6 +57,7 @@ class HomeFragment : Fragment() {
     private fun observeWeather() {
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer { weatherInfo ->
             displayData(weatherInfo)
+            Log.d("HomeFragment", "observed weather -> $weatherInfo")
         })
     }
 

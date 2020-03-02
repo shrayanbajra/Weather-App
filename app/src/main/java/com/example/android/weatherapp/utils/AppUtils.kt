@@ -12,8 +12,8 @@ class AppUtils {
 
     companion object {
         // Preferences
-        const val LOCATION = "Thimi"
-        const val UNITS = "metric" // metric -> Celsius, imperial -> Fahrenheit
+        const val LOCATION = "London"
+        const val UNITS = "metric" // metric for Celsius and imperial for Fahrenheit
         const val API_KEY = "cedb0bc4eeb308672d3377ecf12724e9"
 
         // Application
@@ -25,16 +25,15 @@ class AppUtils {
             }
         }
 
-        fun getApp(): Application {
-            return APP
-        }
+        fun getApp() = APP
 
         // Network Status
-        fun isNotConnectedToInternet(): Boolean {
-            val cm = getApp().getSystemService(Context.CONNECTIVITY_SERVICE)
-                    as ConnectivityManager
-            val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-            return activeNetwork?.isConnectedOrConnecting != true
+        fun hasNoInternetConnection(): Boolean {
+            val connectivityManager = getApp().getSystemService(
+                Context.CONNECTIVITY_SERVICE
+            ) as ConnectivityManager
+            val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+            return activeNetwork?.isConnectedOrConnecting == false
         }
     }
 }
