@@ -33,7 +33,7 @@ class AppUtils {
                 Context.CONNECTIVITY_SERVICE
             ) as ConnectivityManager
             val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-            return activeNetwork?.isConnectedOrConnecting == false
+            return activeNetwork?.isConnectedOrConnecting != true
         }
     }
 }
