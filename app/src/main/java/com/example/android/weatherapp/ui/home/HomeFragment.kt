@@ -5,13 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
@@ -19,10 +19,8 @@ import com.example.android.weatherapp.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    // Views
     private lateinit var imgWeatherCondition: ImageView
-    private lateinit var btnRefresh: Button
-
+    private lateinit var swipeRefreshListener: SwipeRefreshLayout
     private lateinit var binding: FragmentHomeBinding
     private val viewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
@@ -43,27 +41,28 @@ class HomeFragment : Fragment() {
 
     private fun initViews(view: View) {
         imgWeatherCondition = view.findViewById(R.id.img_weather_icon)
-        btnRefresh = view.findViewById(R.id.btn_refresh)
+        swipeRefreshListener = view.findViewById(R.id.swipe_refresh_layout_home)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        observeWeather()
-        refreshWeather()
+        observeCurrentWeather()
+        refreshCurrentWeather()
     }
 
-    private fun observeWeather() {
+    private fun observeCurrentWeather() {
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer { weatherInfo ->
             displayData(weatherInfo)
             Log.d("HomeFragment", "observed weather -> $weatherInfo")
         })
     }
 
-    private fun refreshWeather() {
-        btnRefresh.setOnClickListener {
+    private fun refreshCurrentWeather() {
+        swipeRefreshListener.setOnRefreshListener {
             viewModel.updateWeather()
             observeWeatherUpdateStatus()
+            swipeRefreshListener.isRefreshing = false
         }
     }
 
