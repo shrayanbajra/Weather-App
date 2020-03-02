@@ -7,7 +7,7 @@ import com.example.android.weatherapp.core.BaseViewModel
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.ui.DataWrapper
-import com.example.android.weatherapp.utils.AppUtils
+import com.example.android.weatherapp.utils.NetworkUtils
 
 class HomeViewModel : BaseViewModel() {
 
@@ -22,7 +22,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun updateWeather() {
-        if (AppUtils.hasNoInternetConnection()) {
+        if (NetworkUtils.hasNoInternetConnection()) {
             prepareStatusForNoInternet()
         } else {
             fetchAndUpdateWeather()

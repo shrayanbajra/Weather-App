@@ -3,10 +3,10 @@ package com.example.android.weatherapp.ui.home
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.core.BaseRepository
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.remote.response.WeatherResponse
-import com.example.android.weatherapp.utils.AppUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
@@ -67,7 +67,7 @@ class HomeRepository private constructor() : BaseRepository() {
     }
 
     private suspend fun getCurrentWeatherFromDatabase(): WeatherEntity {
-        return weatherDao.getCurrentWeatherFor(AppUtils.LOCATION) ?: WeatherEntity()
+        return weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION) ?: WeatherEntity()
     }
 
     private suspend fun deleteWeathersFromDatabase() {
@@ -77,7 +77,7 @@ class HomeRepository private constructor() : BaseRepository() {
     // Network Request
     private suspend fun fetchCurrentWeatherFromNetwork(): WeatherResponse {
         return getNetworkClient().getWeatherResponse(
-            AppUtils.LOCATION, AppUtils.UNITS, AppUtils.API_KEY
+            AppPreferences.LOCATION, AppPreferences.UNITS, AppPreferences.API_KEY
         )
     }
 
