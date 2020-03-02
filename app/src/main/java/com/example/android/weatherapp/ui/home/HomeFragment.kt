@@ -91,11 +91,9 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val sharedPrefKey = key ?: ""
         sharedPreferences?.let {
-            if (sharedPrefKey == "units_preference") {
-                val units = sharedPreferences.getString("units_preference", "Empty String")
+            if (sharedPrefKey == "pref_units") {
+                val units = sharedPreferences.getString("pref_units", "")
                 Toast.makeText(activity?.applicationContext, units, Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(activity?.applicationContext, "No Pref", Toast.LENGTH_SHORT).show()
             }
         }
     }

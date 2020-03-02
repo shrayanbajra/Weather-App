@@ -5,9 +5,10 @@
 
         <ListPreference
             android:dialogTitle="Units"
-            android:entries="@array/units_preference"
-            android:entryValues="@array/units_preference"
-            android:key="units_preference"
+            android:entries="@array/pref_units_entries"
+            android:entryValues="@array/pref_units_entry_values"
+            android:summary="%s"
+            android:key="pref_units"
             android:title="Units" />
 
     </PreferenceCategory>

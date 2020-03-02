@@ -9,7 +9,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="icon_representing_current_weather">Icon representing current weather</string>
 
-    <string-array name="units_preference">
+    <string-array name="pref_units_entries">
+        <item>Metric</item>
+        <item>Imperial</item>
+    </string-array>
+
+    <string-array name="pref_units_entry_values">
         <item>Metric</item>
         <item>Imperial</item>
     </string-array>
