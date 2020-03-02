@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
@@ -49,6 +50,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        showProgressBar()
         setupSharedPreferences()
         observeCurrentWeather()
         refreshCurrentWeather()
@@ -62,6 +64,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun observeCurrentWeather() {
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer { weatherInfo ->
+            hideProgressBar()
             displayData(weatherInfo)
             Log.d("HomeFragment", "observed weather -> $weatherInfo")
         })
@@ -69,6 +72,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun refreshCurrentWeather() {
         swipeRefreshListener.setOnRefreshListener {
+            showProgressBar()
             viewModel.updateWeather()
             observeWeatherUpdateStatus()
             swipeRefreshListener.isRefreshing = false
@@ -102,5 +106,15 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         super.onDestroy()
         PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
             .unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun showProgressBar() {
+        binding.progressBarHome.visibility = VISIBLE
+        binding.constraintLayoutHome.visibility = INVISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBarHome.visibility = GONE
+        binding.constraintLayoutHome.visibility = VISIBLE
     }
 }

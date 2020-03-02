@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.ui
+package com.example.android.weatherapp.ui.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
