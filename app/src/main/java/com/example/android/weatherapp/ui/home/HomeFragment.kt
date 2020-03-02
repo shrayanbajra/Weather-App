@@ -23,6 +23,10 @@ import com.example.android.weatherapp.utils.NetworkUtils
 
 class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
+    // TODO: Change No Internet Feedback to SnackBar (replacing Toast)
+    // TODO: Display Location in Settings (Fragment) (will add functionality to change it later)
+    // TODO: Make Network Request according to Units chosen in Settings
+
     private lateinit var imgWeatherCondition: ImageView
     private lateinit var swipeRefreshListener: SwipeRefreshLayout
     private lateinit var binding: FragmentHomeBinding
