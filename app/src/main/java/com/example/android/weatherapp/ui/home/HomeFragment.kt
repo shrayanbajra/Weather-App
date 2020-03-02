@@ -1,5 +1,6 @@
 package com.example.android.weatherapp.ui.home
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,13 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var imgWeatherCondition: ImageView
     private lateinit var swipeRefreshListener: SwipeRefreshLayout
@@ -47,8 +49,15 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        setupSharedPreferences()
         observeCurrentWeather()
         refreshCurrentWeather()
+    }
+
+    private fun setupSharedPreferences() {
+        val sharedPref = PreferenceManager
+            .getDefaultSharedPreferences(activity?.applicationContext)
+        sharedPref.registerOnSharedPreferenceChangeListener(this)
     }
 
     private fun observeCurrentWeather() {
@@ -77,5 +86,23 @@ class HomeFragment : Fragment() {
         viewModel.getWeatherUpdateStatus().observe(viewLifecycleOwner, Observer {
             Toast.makeText(activity, it.getMessage(), Toast.LENGTH_SHORT).show()
         })
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        val sharedPrefKey = key ?: ""
+        sharedPreferences?.let {
+            if (sharedPrefKey == "units_preference") {
+                val units = sharedPreferences.getString("units_preference", "Empty String")
+                Toast.makeText(activity?.applicationContext, units, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity?.applicationContext, "No Pref", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+            .unregisterOnSharedPreferenceChangeListener(this)
     }
 }
