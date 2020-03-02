@@ -38,8 +38,7 @@ class NavHostActivity : AppCompatActivity() {
         drawer = findViewById(R.id.drawer_layout)
 
         val toggle = ActionBarDrawerToggle(
-            this, drawer,
-            R.string.open_navigation_drawer, R.string.close_navigation_drawer
+            this, drawer, R.string.open_navigation_drawer, R.string.close_navigation_drawer
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
@@ -62,17 +61,17 @@ class NavHostActivity : AppCompatActivity() {
     }
 
     private fun navigateToSettingsFragment(): Boolean {
-        var isDestinationValid = false
-        if (isValidDestination(R.id.settingsFragment)) {
+        var isValidDestination = false
+        if (isDestinationValid(R.id.settingsFragment)) {
             Toast.makeText(applicationContext, "Settings Selected!", Toast.LENGTH_SHORT).show()
             navController.navigate(R.id.action_homeFragment_to_settingsFragment)
             drawer.closeDrawer(GravityCompat.START)
-            isDestinationValid = true
+            isValidDestination = true
         }
-        return isDestinationValid
+        return isValidDestination
     }
 
-    private fun isValidDestination(destination: Int): Boolean {
+    private fun isDestinationValid(destination: Int): Boolean {
         return destination != navController.currentDestination?.id
     }
 
