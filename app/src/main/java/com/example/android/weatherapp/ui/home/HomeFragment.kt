@@ -88,6 +88,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun observeWeatherUpdateStatus() {
         viewModel.getWeatherUpdateStatus().observe(viewLifecycleOwner, Observer {
+            hideProgressBar()
             Toast.makeText(activity, it.getMessage(), Toast.LENGTH_SHORT).show()
         })
     }
