@@ -20,16 +20,17 @@ import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.utils.NetworkUtils
+import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // TODO: Change No Internet Feedback to SnackBar (replacing Toast)
     // TODO: Display Location in Settings (Fragment) (will add functionality to change it later)
     // TODO: Make Network Request according to Units chosen in Settings
 
     private lateinit var imgWeatherCondition: ImageView
     private lateinit var swipeRefreshListener: SwipeRefreshLayout
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var snackbar: Snackbar
     private val viewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
     }
@@ -50,6 +51,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun initViews(view: View) {
         imgWeatherCondition = view.findViewById(R.id.img_weather_icon)
         swipeRefreshListener = view.findViewById(R.id.swipe_refresh_layout_home)
+        snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -78,17 +80,18 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun refreshCurrentWeather() {
         swipeRefreshListener.setOnRefreshListener {
             if (NetworkUtils.hasNoInternetConnection()) {
-                Toast.makeText(
-                    activity?.applicationContext,
-                    "No Internet Connection",
-                    Toast.LENGTH_SHORT
-                ).show()
+                displayNoInternetFeedback()
             } else {
                 showProgressBar()
                 viewModel.updateWeather()
             }
             swipeRefreshListener.isRefreshing = false
         }
+    }
+
+    private fun displayNoInternetFeedback() {
+        snackbar.setText("No Internet Connection!")
+        snackbar.show()
     }
 
     private fun displayData(weatherInfo: WeatherUi) {
