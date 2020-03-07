@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.android.weatherapp.core.BaseViewModel
+import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
 import kotlinx.coroutines.Dispatchers
@@ -17,12 +18,12 @@ class HomeViewModel : BaseViewModel() {
 
     fun getWeatherLiveData() = transformLiveDataForUI()
 
-    private fun transformLiveDataForUI(): LiveData<WeatherUi> {
-        return Transformations.map<WeatherEntity, WeatherUi>(_weatherEntity, ::transformEntityToUI)
+    private fun transformLiveDataForUI(): LiveData<DataWrapper<WeatherUi>> {
+        return Transformations.map(_weatherEntity, ::transformEntityToUI)
     }
 
     fun updateWeather() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
             fetchAndUpdateWeather()
         }
     }
@@ -31,23 +32,46 @@ class HomeViewModel : BaseViewModel() {
         try {
             repository.fetchAndStoreCurrentWeather()
         } catch (exception: Exception) {
-            // TODO: Wrap the data from repository and show error according to the response status
-            Log.d("HomeViewModel", "Exception Caught")
+            prepareWrapperForFailedFetch()
+            logError(exception)
         }
     }
 
-    private fun transformEntityToUI(weatherEntity: WeatherEntity): WeatherUi {
+    private fun prepareWrapperForFailedFetch() {
+        val wrapperForFailedWeatherUpdate =
+            DataWrapper<WeatherEntity>()
+        wrapperForFailedWeatherUpdate.prepareFailure("Couldn't Retrieve Data From Server")
+        Log.d("HomeViewModel", "Couldn't Retrieve Data From Server")
+        _weatherEntity.postValue(wrapperForFailedWeatherUpdate)
+    }
+
+    private fun logError(exception: Exception) {
+        Log.d("HomeViewModel", exception.localizedMessage ?: "")
+    }
+
+    private fun transformEntityToUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
         val degreeSymbol = "\u00B0"
-        return WeatherUi().apply {
-            weatherEntity.let { entity ->
-                location = entity.location
-                weatherCondition = entity.weatherCondition
-                weatherDescription = entity.weatherDescription
-                temperature = entity.temperature + degreeSymbol
-                minTemperature = entity.minTemperature + degreeSymbol
-                maxTemperature = entity.maxTemperature + degreeSymbol
-                icon = entity.imageUri
+        val weatherUi = WeatherUi().apply {
+            entityWrapper.wrapperBody.let { entity ->
+                location = entity?.location ?: ""
+                weatherCondition = entity?.weatherCondition ?: ""
+                weatherDescription = entity?.weatherDescription ?: ""
+                temperature = entity?.temperature + degreeSymbol
+                minTemperature = entity?.minTemperature + degreeSymbol
+                maxTemperature = entity?.maxTemperature + degreeSymbol
+                icon = entity?.imageUri ?: ""
             }
         }
+        return prepareWrapperForUI(entityWrapper).apply {
+            wrapperBody = weatherUi
+        }
+    }
+
+    private fun prepareWrapperForUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
+        val weatherUiWrapper =
+            DataWrapper<WeatherUi>()
+        weatherUiWrapper.status = entityWrapper.status
+        weatherUiWrapper.message = entityWrapper.message
+        return weatherUiWrapper
     }
 }

@@ -70,10 +70,17 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun observeCurrentWeather() {
-        viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer { weatherInfo ->
+        viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer {
             hideProgressBar()
-            displayData(weatherInfo)
-            Log.d("HomeFragment", "observed weather -> $weatherInfo")
+            if (it.wasFailure()) {
+                snackbar.setText(it.message)
+                snackbar.show()
+                return@Observer
+            }
+            it.wrapperBody?.let { weatherInfo ->
+                displayData(weatherInfo)
+                Log.d("HomeFragment", "observed weather -> $weatherInfo")
+            }
         })
     }
 

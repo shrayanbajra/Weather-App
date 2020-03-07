@@ -2,7 +2,7 @@ package com.example.android.weatherapp.core
 
 import com.example.android.weatherapp.app.AppDatabase
 import com.example.android.weatherapp.data.local.WeatherDao
-import com.example.android.weatherapp.network.Api
+import com.example.android.weatherapp.network.API
 import com.example.android.weatherapp.network.RetrofitClient
 
 abstract class BaseRepository {
@@ -11,7 +11,7 @@ abstract class BaseRepository {
         return AppDatabase.getDatabaseInstance().weatherDao()
     }
 
-    fun getNetworkClient(): Api {
+    fun getNetworkClient(): API {
         return RetrofitClient.getApiInstance()
     }
 }

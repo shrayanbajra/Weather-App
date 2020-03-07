@@ -1,16 +1,13 @@
 package com.example.android.weatherapp.ui.home
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.core.BaseRepository
+import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.remote.response.WeatherResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.RoundingMode
@@ -25,20 +22,30 @@ class HomeRepository private constructor() : BaseRepository() {
 
     // Dao and LiveData
     private val weatherDao = getWeatherDaoInstance()
-    private val _weatherEntity = MutableLiveData<WeatherEntity>()
+    private val _weatherEntity = MutableLiveData<DataWrapper<WeatherEntity>>()
 
     init {
-        CoroutineScope(Main).launch {
-            val weatherEntity = async { getCurrentWeatherFromDatabase() }
-            _weatherEntity.value = weatherEntity.await()
+        CoroutineScope(IO).launch {
+            updateWeatherEntityLiveData()
         }
     }
 
-    fun getCurrentWeatherLiveData() = _weatherEntity as LiveData<WeatherEntity>
+    fun getCurrentWeatherLiveData() = _weatherEntity
 
+    private suspend fun updateWeatherEntityLiveData() {
+        val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
+        val successEntityWrapper =
+            DataWrapper<WeatherEntity>()
+        successEntityWrapper.prepareSuccess(
+            "Successfully retrieved updated data",
+            weatherEntityFromDatabase
+        )
+        _weatherEntity.postValue(successEntityWrapper)
+    }
+
+    @Throws(Exception::class)
     suspend fun fetchAndStoreCurrentWeather() {
         val weatherResponse = fetchCurrentWeatherFromNetwork()
-        Log.d("HomeRepo", "response ld value -> $weatherResponse")
         updateDatabase(weatherResponse)
     }
 
@@ -46,12 +53,12 @@ class HomeRepository private constructor() : BaseRepository() {
         deleteWeathersFromDatabase()
         val weatherEntity = transformResponseToEntity(weatherResponse)
         insertCurrentWeatherIntoDatabase(weatherEntity)
-        val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
-        _weatherEntity.value = weatherEntityFromDatabase
-        Log.d("HomeRepo", "entity ld value -> ${getCurrentWeatherFromDatabase()}")
+        updateWeatherEntityLiveData()
     }
 
-    // Database Operations
+    /*
+    Dao Operations
+     */
     private suspend fun insertCurrentWeatherIntoDatabase(weatherEntity: WeatherEntity) {
         withContext(IO) {
             weatherDao.insertCurrentWeatherIntoDatabase(weatherEntity)

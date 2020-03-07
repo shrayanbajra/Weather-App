@@ -5,8 +5,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 // API Endpoints
-interface Api {
+interface API {
 
+    @Suppress("SpellCheckingInspection")
     @GET("weather")
     suspend fun getWeatherResponse(
         @Query("q") location: String,
