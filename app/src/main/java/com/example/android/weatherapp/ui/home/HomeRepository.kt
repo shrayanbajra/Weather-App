@@ -34,11 +34,9 @@ class HomeRepository private constructor() : BaseRepository() {
 
     private suspend fun updateWeatherEntityLiveData() {
         val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
-        val successEntityWrapper =
-            DataWrapper<WeatherEntity>()
+        val successEntityWrapper = DataWrapper<WeatherEntity>()
         successEntityWrapper.prepareSuccess(
-            "Successfully retrieved updated data",
-            weatherEntityFromDatabase
+            "Successfully Updated Weather Information", weatherEntityFromDatabase
         )
         _weatherEntity.postValue(successEntityWrapper)
     }

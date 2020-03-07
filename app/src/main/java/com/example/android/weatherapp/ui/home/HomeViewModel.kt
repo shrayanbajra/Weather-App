@@ -38,10 +38,8 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private fun prepareWrapperForFailedFetch() {
-        val wrapperForFailedWeatherUpdate =
-            DataWrapper<WeatherEntity>()
+        val wrapperForFailedWeatherUpdate = DataWrapper<WeatherEntity>()
         wrapperForFailedWeatherUpdate.prepareFailure("Couldn't Retrieve Data From Server")
-        Log.d("HomeViewModel", "Couldn't Retrieve Data From Server")
         _weatherEntity.postValue(wrapperForFailedWeatherUpdate)
     }
 
@@ -62,16 +60,15 @@ class HomeViewModel : BaseViewModel() {
                 icon = entity?.imageUri ?: ""
             }
         }
-        return prepareWrapperForUI(entityWrapper).apply {
-            wrapperBody = weatherUi
-        }
+        val weatherUiWrapper = prepareWrapperForUI(entityWrapper)
+        weatherUiWrapper.wrapperBody = weatherUi
+        return weatherUiWrapper
     }
 
     private fun prepareWrapperForUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
-        val weatherUiWrapper =
-            DataWrapper<WeatherUi>()
-        weatherUiWrapper.status = entityWrapper.status
-        weatherUiWrapper.message = entityWrapper.message
-        return weatherUiWrapper
+        return DataWrapper<WeatherUi>().apply {
+            status = entityWrapper.status
+            message = entityWrapper.message
+        }
     }
 }

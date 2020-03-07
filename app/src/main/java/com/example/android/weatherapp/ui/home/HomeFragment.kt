@@ -26,6 +26,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     // TODO: Display Location in Settings (Fragment) (will add functionality to change it later)
     // TODO: Make Network Request according to Units chosen in Settings
+    // TODO: Need to Make a Good Looking Empty State when there are no entries in database
 
     private lateinit var imgWeatherCondition: ImageView
     private lateinit var swipeRefreshListener: SwipeRefreshLayout
@@ -73,15 +74,25 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer {
             hideProgressBar()
             if (it.wasFailure()) {
-                snackbar.setText(it.message)
-                snackbar.show()
+                displayFailureFeedback(it.message)
                 return@Observer
             }
+            displaySuccessFeedback(it.message)
             it.wrapperBody?.let { weatherInfo ->
                 displayData(weatherInfo)
                 Log.d("HomeFragment", "observed weather -> $weatherInfo")
             }
         })
+    }
+
+    private fun displayFailureFeedback(failureMessage: String) {
+        snackbar.setText(failureMessage)
+        snackbar.show()
+    }
+
+    private fun displaySuccessFeedback(successMessage: String) {
+        snackbar.setText(successMessage)
+        snackbar.show()
     }
 
     private fun refreshCurrentWeather() {
@@ -110,10 +121,10 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val sharedPrefKey = key ?: ""
-        sharedPreferences?.let {
+        sharedPreferences?.let { sharedPref ->
             if (sharedPrefKey == "pref_units") {
-                val units = sharedPreferences.getString("pref_units", "")
-                Toast.makeText(activity?.applicationContext, "$units selected", Toast.LENGTH_SHORT)
+                val unit = sharedPref.getString("pref_units", "")
+                Toast.makeText(activity?.applicationContext, "$unit selected", Toast.LENGTH_SHORT)
                     .show()
             }
         }
