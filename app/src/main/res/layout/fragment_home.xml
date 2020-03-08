@@ -12,7 +12,7 @@
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout_home"
+        android:id="@+id/swipeRefreshLayoutHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_background">
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.25" />
+                app:layout_constraintGuide_percent="0.20" />
 
             <ImageView
                 android:id="@+id/imgEmptyState"
@@ -43,19 +43,23 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/no_internet_connection"
                 android:src="@drawable/img_no_internet_connection"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/emptyStateGuidelineEnd"
                 app:layout_constraintStart_toEndOf="@id/emptyStateGuidelineStart"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/tvEmptyStateDescription"
+                android:id="@+id/emptyStateDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/imgEmptyState"
                 app:layout_constraintStart_toStartOf="@id/imgEmptyState"
-                app:layout_constraintTop_toBottomOf="@id/imgEmptyState">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.80">
 
                 <TextView
                     android:id="@+id/tvEmptyStateDescriptionTitle"
@@ -71,11 +75,12 @@
                     android:id="@+id/tvEmptyStateDescriptionBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginTop="8dp"
                     android:minLines="2"
                     android:text="Please Check Your Internet Connection And Try Again"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textColor="@android:color/darker_gray" />
 
             </LinearLayout>
 
@@ -84,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="0.80" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutHome"
@@ -92,7 +97,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/tv_location"
+                    android:id="@+id/tvLocation"
                     style="@style/colorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,20 +111,20 @@
                     tools:text="Location" />
 
                 <TextView
-                    android:id="@+id/tv_weather_condition"
+                    android:id="@+id/tvWeatherCondition"
                     style="@style/colorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginStart="16dp"
                     android:text="@={weatherUi.weatherCondition}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                    app:layout_constraintBottom_toBottomOf="@id/img_weather_icon"
-                    app:layout_constraintLeft_toRightOf="@id/img_weather_icon"
-                    app:layout_constraintTop_toTopOf="@id/img_weather_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/imgWeatherIcon"
+                    app:layout_constraintLeft_toRightOf="@id/imgWeatherIcon"
+                    app:layout_constraintTop_toTopOf="@id/imgWeatherIcon"
                     tools:text="Clear" />
 
                 <TextView
-                    android:id="@+id/tv_min_temp"
+                    android:id="@+id/tvMinTemp"
                     style="@style/colorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,7 +133,7 @@
                     android:text="@={weatherUi.minTemperature}"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tv_temp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvTemp"
                     app:layout_constraintHorizontal_bias="0.85"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -139,27 +144,27 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:background="#EFEDF2"
-                    app:layout_constraintBottom_toTopOf="@id/tv_min_temp"
-                    app:layout_constraintLeft_toLeftOf="@id/tv_min_temp"
-                    app:layout_constraintRight_toRightOf="@id/tv_min_temp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_max_temp" />
+                    app:layout_constraintBottom_toTopOf="@id/tvMinTemp"
+                    app:layout_constraintLeft_toLeftOf="@id/tvMinTemp"
+                    app:layout_constraintRight_toRightOf="@id/tvMinTemp"
+                    app:layout_constraintTop_toBottomOf="@id/tvMaxTemp" />
 
                 <TextView
-                    android:id="@+id/tv_max_temp"
+                    android:id="@+id/tvMaxTemp"
                     style="@style/colorStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:text="@={weatherUi.maxTemperature}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    app:layout_constraintBottom_toTopOf="@id/tv_min_temp"
+                    app:layout_constraintBottom_toTopOf="@id/tvMinTemp"
                     app:layout_constraintLeft_toLeftOf="@id/divider"
                     app:layout_constraintRight_toRightOf="@id/divider"
                     tools:layout_editor_absoluteX="309dp"
                     tools:text="27°" />
 
                 <TextView
-                    android:id="@+id/tv_temp"
+                    android:id="@+id/tvTemp"
                     style="@style/colorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -173,7 +178,7 @@
                     tools:text="23°" />
 
                 <TextView
-                    android:id="@+id/tv_weather_description"
+                    android:id="@+id/tvWeatherDescription"
                     style="@style/colorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -187,14 +192,14 @@
                     tools:text="Weather Description" />
 
                 <ImageView
-                    android:id="@+id/img_weather_icon"
+                    android:id="@+id/imgWeatherIcon"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginTop="64dp"
                     android:contentDescription="@string/weather_condition"
                     android:scaleType="fitCenter"
-                    app:layout_constraintBottom_toTopOf="@id/tv_temp"
-                    app:layout_constraintLeft_toLeftOf="@id/tv_temp"
+                    app:layout_constraintBottom_toTopOf="@id/tvTemp"
+                    app:layout_constraintLeft_toLeftOf="@id/tvTemp"
                     tools:src="@mipmap/ic_launcher" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

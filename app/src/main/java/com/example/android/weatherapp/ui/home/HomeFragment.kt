@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -31,6 +32,9 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private lateinit var swipeRefreshListener: SwipeRefreshLayout
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
+
+    private lateinit var imgEmptyState: ImageView
+    private lateinit var emptyStateDescription: LinearLayout
     private val viewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
     }
@@ -49,9 +53,12 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun initViews(view: View) {
-        imgWeatherCondition = view.findViewById(R.id.img_weather_icon)
-        swipeRefreshListener = view.findViewById(R.id.swipe_refresh_layout_home)
+        imgWeatherCondition = view.findViewById(R.id.imgWeatherIcon)
+        swipeRefreshListener = view.findViewById(R.id.swipeRefreshLayoutHome)
         snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
+
+        imgEmptyState = view.findViewById(R.id.imgEmptyState)
+        emptyStateDescription = view.findViewById(R.id.emptyStateDescription)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
