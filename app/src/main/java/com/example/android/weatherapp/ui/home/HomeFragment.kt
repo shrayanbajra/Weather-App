@@ -35,6 +35,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private lateinit var imgEmptyState: ImageView
     private lateinit var emptyStateDescription: LinearLayout
+
     private val viewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
     }
@@ -83,6 +84,10 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
                 displayFailureFeedback(it.message)
                 return@Observer
             }
+            if (it.wrapperBody == null && NetworkUtils.hasNoInternetConnection()) {
+                displayEmptyState()
+                return@Observer
+            }
             it.wrapperBody?.let { weatherInfo ->
                 displayData(weatherInfo)
             }
@@ -92,6 +97,11 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun displayFailureFeedback(failureMessage: String) {
         snackbar.setText(failureMessage)
         snackbar.show()
+    }
+
+    private fun displayEmptyState() {
+        imgEmptyState.visibility = VISIBLE
+        emptyStateDescription.visibility = VISIBLE
     }
 
     private fun refreshCurrentWeather() {
