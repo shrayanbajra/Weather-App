@@ -2,19 +2,17 @@ package com.example.android.weatherapp.ui.home
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.ui.WeatherUi
@@ -28,13 +26,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     // TODO: Make Network Request according to Units chosen in Settings
     // TODO: Need to Make a Good Looking Empty State when there are no entries in database
 
-    private lateinit var imgWeatherCondition: ImageView
-    private lateinit var swipeRefreshListener: SwipeRefreshLayout
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
-
-    private lateinit var imgEmptyState: ImageView
-    private lateinit var emptyStateDescription: LinearLayout
 
     private val viewModel by lazy {
         ViewModelProvider(this).get(HomeViewModel::class.java)
@@ -50,20 +43,19 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViews(view)
+        initSnackBar(view)
     }
 
-    private fun initViews(view: View) {
-        imgWeatherCondition = view.findViewById(R.id.imgWeatherIcon)
-        swipeRefreshListener = view.findViewById(R.id.swipeRefreshLayoutHome)
+    private fun initSnackBar(view: View) {
         snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
-
-        imgEmptyState = view.findViewById(R.id.imgEmptyState)
-        emptyStateDescription = view.findViewById(R.id.emptyStateDescription)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        binding.deleteAll.setOnClickListener {
+            viewModel.deleteAll()
+        }
 
         showProgressBar()
         setupSharedPreferences()
@@ -80,15 +72,31 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun observeCurrentWeather() {
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer {
             hideProgressBar()
+            Log.d("HomeFragment:", "Inside Observer")
+            Log.d("HomeFragment:", "${it.status}")
+            Log.d("HomeFragment:", "${it.message}")
+            Log.d("HomeFragment:", "${it.wrapperBody}")
             if (it.wasFailure()) {
+                Log.d("HomeFragment:", "Inside failure")
+                Log.d("HomeFragment:", "${it.status}")
+                Log.d("HomeFragment:", it.message)
+                Log.d("HomeFragment:", "${it.wrapperBody}")
                 displayFailureFeedback(it.message)
                 return@Observer
             }
-            if (it.wrapperBody == null && NetworkUtils.hasNoInternetConnection()) {
+            if (it.wrapperBody == WeatherUi() && NetworkUtils.hasNoInternetConnection()) {
+                Log.d("HomeFragment:", "Inside Empty State")
+                Log.d("HomeFragment:", "${it.status}")
+                Log.d("HomeFragment:", it.message)
+                Log.d("HomeFragment:", "${it.wrapperBody}")
                 displayEmptyState()
                 return@Observer
             }
             it.wrapperBody?.let { weatherInfo ->
+                Log.d("HomeFragment:", "Inside success")
+                Log.d("HomeFragment:", "${it.status}")
+                Log.d("HomeFragment:", it.message)
+                Log.d("HomeFragment:", "${it.wrapperBody}")
                 displayData(weatherInfo)
             }
         })
@@ -100,19 +108,21 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun displayEmptyState() {
-        imgEmptyState.visibility = VISIBLE
-        emptyStateDescription.visibility = VISIBLE
+        binding.imgEmptyState.visibility = VISIBLE
+        binding.emptyStateDescription.visibility = VISIBLE
+
+        binding.constraintLayoutHome.visibility = GONE
     }
 
     private fun refreshCurrentWeather() {
-        swipeRefreshListener.setOnRefreshListener {
+        binding.swipeRefreshLayoutHome.setOnRefreshListener {
             if (NetworkUtils.hasNoInternetConnection()) {
                 displayNoInternetFeedback()
             } else {
                 showProgressBar()
                 viewModel.updateWeather()
             }
-            swipeRefreshListener.isRefreshing = false
+            binding.swipeRefreshLayoutHome.isRefreshing = false
         }
     }
 
@@ -125,7 +135,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         binding.weatherUi = weatherInfo
         Glide.with(this)
             .load(weatherInfo.icon)
-            .into(imgWeatherCondition)
+            .into(binding.imgWeatherIcon)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -148,10 +158,16 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun showProgressBar() {
         binding.progressBarHome.visibility = VISIBLE
         binding.constraintLayoutHome.visibility = INVISIBLE
+
+        binding.imgEmptyState.visibility = GONE
+        binding.emptyStateDescription.visibility = GONE
     }
 
     private fun hideProgressBar() {
         binding.progressBarHome.visibility = GONE
         binding.constraintLayoutHome.visibility = VISIBLE
+
+        binding.imgEmptyState.visibility = GONE
+        binding.emptyStateDescription.visibility = GONE
     }
 }

@@ -48,15 +48,14 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private fun transformEntityToUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
-        val degreeSymbol = "\u00B0"
         val weatherUi = WeatherUi().apply {
             entityWrapper.wrapperBody.let { entity ->
                 location = entity?.location ?: ""
                 weatherCondition = entity?.weatherCondition ?: ""
                 weatherDescription = entity?.weatherDescription ?: ""
-                temperature = entity?.temperature + degreeSymbol
-                minTemperature = entity?.minTemperature + degreeSymbol
-                maxTemperature = entity?.maxTemperature + degreeSymbol
+                temperature = entity?.temperature ?: ""
+                minTemperature = entity?.minTemperature ?: ""
+                maxTemperature = entity?.maxTemperature ?: ""
                 icon = entity?.imageUri ?: ""
             }
         }
@@ -69,6 +68,12 @@ class HomeViewModel : BaseViewModel() {
         return DataWrapper<WeatherUi>().apply {
             status = entityWrapper.status
             message = entityWrapper.message
+        }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch {
+            repository.deleteWeathersFromDatabase()
         }
     }
 }

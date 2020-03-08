@@ -69,7 +69,7 @@ class HomeRepository private constructor() : BaseRepository() {
         }
     }
 
-    private suspend fun deleteWeathersFromDatabase() {
+    suspend fun deleteWeathersFromDatabase() {
         withContext(IO) {
             weatherDao.deleteWeathersFromDatabase()
         }

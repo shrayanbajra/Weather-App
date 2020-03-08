@@ -21,6 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/deleteAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete All"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ProgressBar
                 android:id="@+id/progressBarHome"
                 android:layout_width="wrap_content"
@@ -130,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:text="@={weatherUi.minTemperature}"
+                    android:text="@{@string/degree_symbol(weatherUi.minTemperature)}"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     app:layout_constraintBaseline_toBaselineOf="@id/tvTemp"
@@ -155,7 +164,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:text="@={weatherUi.maxTemperature}"
+                    android:text="@{@string/degree_symbol(weatherUi.maxTemperature)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     app:layout_constraintBottom_toTopOf="@id/tvMinTemp"
                     app:layout_constraintLeft_toLeftOf="@id/divider"
@@ -168,7 +177,7 @@
                     style="@style/colorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@={weatherUi.temperature}"
+                    android:text="@{@string/degree_symbol(weatherUi.temperature)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.2"
