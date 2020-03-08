@@ -2,10 +2,8 @@ package com.example.android.weatherapp.ui.home
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.*
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -25,7 +23,6 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     // TODO: Display Location in Settings (Fragment) (will add functionality to change it later)
     // TODO: Make Network Request according to Units chosen in Settings
-    // TODO: Need to Make a Good Looking Empty State when there are no entries in database
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
@@ -53,10 +50,6 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        binding.deleteAll.setOnClickListener {
-            viewModel.deleteAll()
-        }
 
         showProgressBar()
         setupSharedPreferences()
@@ -119,6 +112,23 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
             }
             binding.swipeRefreshLayoutHome.isRefreshing = false
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.home_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.delete_weathers -> viewModel.deleteAll()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun displayNoInternetFeedback() {

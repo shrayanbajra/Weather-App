@@ -12,6 +12,7 @@
 
     <string name="degree_symbol">%s\u00B0</string>
     <string name="generic_name">Hello %s</string>
+    <string name="delete_weathers">Delete Weathers</string>
 
     <string-array name="pref_units_entries">
         <item>Metric</item>
