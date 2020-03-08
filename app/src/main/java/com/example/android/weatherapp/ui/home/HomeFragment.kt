@@ -2,7 +2,6 @@ package com.example.android.weatherapp.ui.home
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -19,6 +18,7 @@ import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.utils.NetworkUtils
 import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 
 class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -72,31 +72,31 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun observeCurrentWeather() {
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer {
             hideProgressBar()
-            Log.d("HomeFragment:", "Inside Observer")
-            Log.d("HomeFragment:", "${it.status}")
-            Log.d("HomeFragment:", "${it.message}")
-            Log.d("HomeFragment:", "${it.wrapperBody}")
-            if (it.wasFailure()) {
-                Log.d("HomeFragment:", "Inside failure")
-                Log.d("HomeFragment:", "${it.status}")
-                Log.d("HomeFragment:", it.message)
-                Log.d("HomeFragment:", "${it.wrapperBody}")
-                displayFailureFeedback(it.message)
-                return@Observer
-            }
-            if (it.wrapperBody == WeatherUi() && NetworkUtils.hasNoInternetConnection()) {
-                Log.d("HomeFragment:", "Inside Empty State")
-                Log.d("HomeFragment:", "${it.status}")
-                Log.d("HomeFragment:", it.message)
-                Log.d("HomeFragment:", "${it.wrapperBody}")
+            Timber.d("Inside Observer")
+            Timber.d("${it.status}")
+            Timber.d(it.message)
+            Timber.d("${it.wrapperBody}")
+            if (it.wasFailure() && it.wrapperBody == WeatherUi() && NetworkUtils.hasNoInternetConnection()) {
+                Timber.d("Inside Empty State")
+                Timber.d("${it.status}")
+                Timber.d(it.message)
+                Timber.d("${it.wrapperBody}")
                 displayEmptyState()
                 return@Observer
             }
+            if (it.wasFailure()) {
+                Timber.d("Inside failure")
+                Timber.d("${it.status}")
+                Timber.d(it.message)
+                Timber.d("${it.wrapperBody}")
+                displayFailureFeedback(it.message)
+                return@Observer
+            }
             it.wrapperBody?.let { weatherInfo ->
-                Log.d("HomeFragment:", "Inside success")
-                Log.d("HomeFragment:", "${it.status}")
-                Log.d("HomeFragment:", it.message)
-                Log.d("HomeFragment:", "${it.wrapperBody}")
+                Timber.d("Inside success")
+                Timber.d("${it.status}")
+                Timber.d(it.message)
+                Timber.d("${it.wrapperBody}")
                 displayData(weatherInfo)
             }
         })
