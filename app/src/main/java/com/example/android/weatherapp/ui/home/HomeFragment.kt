@@ -2,7 +2,6 @@ package com.example.android.weatherapp.ui.home
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -77,21 +76,14 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
                 displayFailureFeedback(it.message)
                 return@Observer
             }
-            displaySuccessFeedback(it.message)
             it.wrapperBody?.let { weatherInfo ->
                 displayData(weatherInfo)
-                Log.d("HomeFragment", "observed weather -> $weatherInfo")
             }
         })
     }
 
     private fun displayFailureFeedback(failureMessage: String) {
         snackbar.setText(failureMessage)
-        snackbar.show()
-    }
-
-    private fun displaySuccessFeedback(successMessage: String) {
-        snackbar.setText(successMessage)
         snackbar.show()
     }
 
