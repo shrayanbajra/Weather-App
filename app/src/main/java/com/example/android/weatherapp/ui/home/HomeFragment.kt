@@ -67,7 +67,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer {
             hideProgressBar()
             logStatus(it, "Inside Observer")
-            if (it.wasFailure() && it.wrapperBody == WeatherUi() && NetworkUtils.hasNoInternetConnection()) {
+            if (checkForEmptyState(it)) {
                 logStatus(it, "Inside Empty State")
                 displayEmptyState()
                 return@Observer
@@ -83,6 +83,12 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
                 displayData(weatherInfo)
             }
         })
+    }
+
+    private fun checkForEmptyState(it: DataWrapper<WeatherUi>): Boolean {
+        return it.wasFailure()
+                && it.wrapperBody == WeatherUi()
+                && NetworkUtils.hasNoInternetConnection()
     }
 
     private fun logStatus(it: DataWrapper<WeatherUi>, message: String) {
@@ -168,7 +174,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun hideProgressBar() {
         setProgressBarVisibility(GONE)
-        setWeatherInformationVisibility(GONE)
+        setWeatherInformationVisibility(VISIBLE)
         setEmptyStateVisibility(GONE)
     }
 
