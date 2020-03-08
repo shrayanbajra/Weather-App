@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.utils.NetworkUtils
@@ -72,34 +73,30 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun observeCurrentWeather() {
         viewModel.getWeatherLiveData().observe(viewLifecycleOwner, Observer {
             hideProgressBar()
-            Timber.d("Inside Observer")
-            Timber.d("${it.status}")
-            Timber.d(it.message)
-            Timber.d("${it.wrapperBody}")
+            logStatus(it, "Inside Observer")
             if (it.wasFailure() && it.wrapperBody == WeatherUi() && NetworkUtils.hasNoInternetConnection()) {
-                Timber.d("Inside Empty State")
-                Timber.d("${it.status}")
-                Timber.d(it.message)
-                Timber.d("${it.wrapperBody}")
+                logStatus(it, "Inside Empty State")
                 displayEmptyState()
                 return@Observer
             }
             if (it.wasFailure()) {
-                Timber.d("Inside failure")
-                Timber.d("${it.status}")
-                Timber.d(it.message)
-                Timber.d("${it.wrapperBody}")
+                logStatus(it, "Inside failure")
+                setWeatherInformationVisibility(GONE)
                 displayFailureFeedback(it.message)
                 return@Observer
             }
             it.wrapperBody?.let { weatherInfo ->
-                Timber.d("Inside success")
-                Timber.d("${it.status}")
-                Timber.d(it.message)
-                Timber.d("${it.wrapperBody}")
+                logStatus(it, "Inside success")
                 displayData(weatherInfo)
             }
         })
+    }
+
+    private fun logStatus(it: DataWrapper<WeatherUi>, message: String) {
+        Timber.d(message)
+        Timber.d("${it.status}")
+        Timber.d(it.message)
+        Timber.d("${it.wrapperBody}")
     }
 
     private fun displayFailureFeedback(failureMessage: String) {
@@ -108,10 +105,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun displayEmptyState() {
-        binding.imgEmptyState.visibility = VISIBLE
-        binding.emptyStateDescription.visibility = VISIBLE
-
-        binding.constraintLayoutHome.visibility = GONE
+        setEmptyStateVisibility(VISIBLE)
+        setWeatherInformationVisibility(GONE)
     }
 
     private fun refreshCurrentWeather() {
@@ -156,18 +151,27 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun showProgressBar() {
-        binding.progressBarHome.visibility = VISIBLE
-        binding.constraintLayoutHome.visibility = INVISIBLE
-
-        binding.imgEmptyState.visibility = GONE
-        binding.emptyStateDescription.visibility = GONE
+        setProgressBarVisibility(VISIBLE)
+        setWeatherInformationVisibility(INVISIBLE)
+        setEmptyStateVisibility(GONE)
     }
 
     private fun hideProgressBar() {
-        binding.progressBarHome.visibility = GONE
-        binding.constraintLayoutHome.visibility = VISIBLE
+        setProgressBarVisibility(GONE)
+        setWeatherInformationVisibility(GONE)
+        setEmptyStateVisibility(GONE)
+    }
 
-        binding.imgEmptyState.visibility = GONE
-        binding.emptyStateDescription.visibility = GONE
+    private fun setEmptyStateVisibility(visibility: Int) {
+        binding.imgEmptyState.visibility = visibility
+        binding.emptyStateDescription.visibility = visibility
+    }
+
+    private fun setProgressBarVisibility(visibility: Int) {
+        binding.progressBarHome.visibility = visibility
+    }
+
+    private fun setWeatherInformationVisibility(visibility: Int) {
+        binding.constraintLayoutHome.visibility = visibility
     }
 }
