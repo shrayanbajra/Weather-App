@@ -1,6 +1,5 @@
 package com.example.android.weatherapp.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
@@ -10,6 +9,7 @@ import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class HomeViewModel : BaseViewModel() {
 
@@ -44,7 +44,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private fun logError(exception: Exception) {
-        Log.d("HomeViewModel", exception.localizedMessage ?: "")
+        Timber.d(exception.localizedMessage ?: "")
     }
 
     private fun transformEntityToUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
