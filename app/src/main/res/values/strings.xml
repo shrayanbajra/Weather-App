@@ -8,6 +8,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="icon_representing_current_weather">Icon representing current weather</string>
+    <string name="no_internet_connection">No Internet Connection</string>
 
     <string-array name="pref_units_entries">
         <item>Metric</item>
