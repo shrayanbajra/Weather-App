@@ -32,13 +32,30 @@ class HomeRepository private constructor() : BaseRepository() {
 
     fun getCurrentWeatherLiveData() = _weatherEntity
 
-    private suspend fun updateWeatherEntityLiveData() {
+    private suspend fun updateWeatherEntityLiveData(message: String = "") {
         val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
-        val successEntityWrapper = DataWrapper<WeatherEntity>()
-        successEntityWrapper.prepareSuccess(
-            "Successfully Updated Weather Information", weatherEntityFromDatabase
+        val entityWrapper = if (weatherEntityFromDatabase == null) {
+            prepareEntityWrapperForFailure()
+        } else {
+            prepareEntityWrapperForSuccess(message, weatherEntityFromDatabase)
+        }
+        _weatherEntity.postValue(entityWrapper)
+    }
+
+    private fun prepareEntityWrapperForFailure(): DataWrapper<WeatherEntity> {
+        val failureEntityWrapper = DataWrapper<WeatherEntity>()
+        failureEntityWrapper.prepareFailure(
+            "No Weather Information found for ${AppPreferences.LOCATION}"
         )
-        _weatherEntity.postValue(successEntityWrapper)
+        return failureEntityWrapper
+    }
+
+    private fun prepareEntityWrapperForSuccess(
+        message: String, weatherEntityFromDatabase: WeatherEntity
+    ): DataWrapper<WeatherEntity> {
+        val successEntityWrapper = DataWrapper<WeatherEntity>()
+        successEntityWrapper.prepareSuccess(message, weatherEntityFromDatabase)
+        return successEntityWrapper
     }
 
     @Throws(Exception::class)
@@ -51,7 +68,7 @@ class HomeRepository private constructor() : BaseRepository() {
         deleteWeathersFromDatabase()
         val weatherEntity = transformResponseToEntity(weatherResponse)
         insertCurrentWeatherIntoDatabase(weatherEntity)
-        updateWeatherEntityLiveData()
+        updateWeatherEntityLiveData("Successfully Updated Weather Information")
     }
 
     /*
@@ -63,9 +80,9 @@ class HomeRepository private constructor() : BaseRepository() {
         }
     }
 
-    private suspend fun getCurrentWeatherFromDatabase(): WeatherEntity {
+    private suspend fun getCurrentWeatherFromDatabase(): WeatherEntity? {
         return withContext(IO) {
-            weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION) ?: WeatherEntity()
+            weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION)
         }
     }
 
