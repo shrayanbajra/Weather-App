@@ -78,10 +78,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
                 displayFailureFeedback(it.message)
                 return@Observer
             }
-            it.wrapperBody?.let { weatherInfo ->
-                logStatus(it, "Inside success")
-                displayData(weatherInfo)
-            }
+            displayCurrentWeather(it)
         })
     }
 
@@ -106,6 +103,13 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun displayEmptyState() {
         setEmptyStateVisibility(VISIBLE)
         setWeatherInformationVisibility(GONE)
+    }
+
+    private fun displayCurrentWeather(it: DataWrapper<WeatherUi>) {
+        it.wrapperBody?.let { weatherInfo ->
+            logStatus(it, "Inside success")
+            displayData(weatherInfo)
+        }
     }
 
     private fun refreshCurrentWeather() {
