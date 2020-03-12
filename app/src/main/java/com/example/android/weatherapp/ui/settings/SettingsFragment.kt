@@ -1,20 +1,55 @@
 package com.example.android.weatherapp.ui.settings
 
 import android.os.Bundle
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.*
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.app.EMPTY_STRING
+import com.example.android.weatherapp.app.KEY_PREF_LOCATION
+import com.example.android.weatherapp.app.KEY_PREF_UNITS
 
 class SettingsFragment : PreferenceFragmentCompat(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.app_preferences, rootKey)
+
+        bindSummaryValue(findPreference(KEY_PREF_LOCATION))
+        bindSummaryValue(findPreference(KEY_PREF_UNITS))
     }
 
     override fun onPreferenceStartFragment(
         caller: PreferenceFragmentCompat?, pref: Preference?
     ): Boolean {
         return true
+    }
+
+    companion object {
+        fun bindSummaryValue(preference: Preference?) {
+            preference?.let {
+                preference.onPreferenceChangeListener = preferenceChangeListener
+                preferenceChangeListener.onPreferenceChange(
+                    preference,
+                    PreferenceManager.getDefaultSharedPreferences(preference.context)
+                        .getString(preference.key, EMPTY_STRING)
+                )
+            }
+        }
+
+        private val preferenceChangeListener: Preference.OnPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { preference, newValue ->
+                val selectedValue = newValue.toString()
+
+                when (preference) {
+                    is ListPreference -> {
+                        val listPreference: ListPreference = preference
+                        val index: Int = listPreference.findIndexOfValue(selectedValue)
+                        preference.summary = listPreference.entries[index]
+                    }
+                    is EditTextPreference -> {
+                        preference.setSummary(selectedValue)
+                    }
+                }
+                true
+            }
     }
 }

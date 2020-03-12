@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import android.view.View.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,6 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.app.AppPreferences
+import com.example.android.weatherapp.app.EMPTY_STRING
+import com.example.android.weatherapp.app.KEY_PREF_LOCATION
+import com.example.android.weatherapp.app.KEY_PREF_UNITS
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
@@ -45,7 +48,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun initSnackBar(view: View) {
-        snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
+        snackbar = Snackbar.make(view, EMPTY_STRING, Snackbar.LENGTH_LONG)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -156,10 +159,15 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val sharedPrefKey = key ?: ""
         sharedPreferences?.let { sharedPref ->
-            if (sharedPrefKey == "pref_units") {
-                val unit = sharedPref.getString("pref_units", "")
-                Toast.makeText(activity?.applicationContext, "$unit selected", Toast.LENGTH_SHORT)
-                    .show()
+            when (sharedPrefKey) {
+                KEY_PREF_UNITS -> {
+                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
+                    AppPreferences.UNITS = units
+                }
+                KEY_PREF_LOCATION -> {
+                    val location = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
+                    AppPreferences.LOCATION = location
+                }
             }
         }
     }
