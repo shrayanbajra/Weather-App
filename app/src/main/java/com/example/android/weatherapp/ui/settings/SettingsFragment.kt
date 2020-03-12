@@ -40,11 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     is ListPreference -> {
                         val listPreference: ListPreference = preference
                         val index: Int = listPreference.findIndexOfValue(selectedValue)
-                        preference.summary = if (index > 0) {
-                            listPreference.entries[index]
-                        } else {
-                            ""
-                        }
+                        preference.summary = listPreference.entries[index]
                     }
                     is EditTextPreference -> {
                         preference.setSummary(selectedValue)

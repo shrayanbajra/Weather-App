@@ -4,7 +4,7 @@
     <PreferenceCategory android:title="General">
 
         <ListPreference
-            android:dialogTitle="Units"
+            android:dialogTitle="Select Units"
             android:entries="@array/pref_units_entries"
             android:entryValues="@array/pref_units_entry_values"
             android:key="pref_units"
