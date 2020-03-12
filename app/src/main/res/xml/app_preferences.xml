@@ -11,6 +11,10 @@
             android:key="pref_units"
             android:title="Units" />
 
+        <EditTextPreference
+            android:title="Location"
+            android:key="pref_location"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>
