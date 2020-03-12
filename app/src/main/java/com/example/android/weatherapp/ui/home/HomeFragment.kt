@@ -11,10 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
-import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.app.EMPTY_STRING
-import com.example.android.weatherapp.app.KEY_PREF_LOCATION
-import com.example.android.weatherapp.app.KEY_PREF_UNITS
+import com.example.android.weatherapp.app.*
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
@@ -157,15 +154,16 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        val sharedPrefKey = key ?: ""
+        val sharedPrefKey = key.nullToEmpty()
         sharedPreferences?.let { sharedPref ->
             when (sharedPrefKey) {
                 KEY_PREF_UNITS -> {
-                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
+                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
                     AppPreferences.UNITS = units
                 }
                 KEY_PREF_LOCATION -> {
-                    val location = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
+                    val location =
+                        sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING).nullToEmpty()
                     AppPreferences.LOCATION = location
                 }
             }

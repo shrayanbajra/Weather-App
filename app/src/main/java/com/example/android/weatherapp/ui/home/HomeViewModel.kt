@@ -3,6 +3,7 @@ package com.example.android.weatherapp.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
+import com.example.android.weatherapp.app.nullToEmpty
 import com.example.android.weatherapp.core.BaseViewModel
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
@@ -44,19 +45,19 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private fun logError(exception: Exception) {
-        Timber.d(exception.localizedMessage ?: "")
+        Timber.d(exception.localizedMessage.nullToEmpty())
     }
 
     private fun transformEntityToUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
         val weatherUi = WeatherUi().apply {
             entityWrapper.wrapperBody.let { entity ->
-                location = entity?.location ?: ""
-                weatherCondition = entity?.weatherCondition ?: ""
-                weatherDescription = entity?.weatherDescription ?: ""
-                temperature = entity?.temperature ?: ""
-                minTemperature = entity?.minTemperature ?: ""
-                maxTemperature = entity?.maxTemperature ?: ""
-                icon = entity?.imageUri ?: ""
+                location = entity?.location.nullToEmpty()
+                weatherCondition = entity?.weatherCondition.nullToEmpty()
+                weatherDescription = entity?.weatherDescription.nullToEmpty()
+                temperature = entity?.temperature.nullToEmpty()
+                minTemperature = entity?.minTemperature.nullToEmpty()
+                maxTemperature = entity?.maxTemperature.nullToEmpty()
+                icon = entity?.imageUri.nullToEmpty()
             }
         }
         val weatherUiWrapper = prepareWrapperForUI(entityWrapper)
