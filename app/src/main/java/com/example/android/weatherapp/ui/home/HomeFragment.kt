@@ -152,10 +152,23 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val sharedPrefKey = key ?: ""
         sharedPreferences?.let { sharedPref ->
-            if (sharedPrefKey == "pref_units") {
-                val unit = sharedPref.getString("pref_units", "")
-                Toast.makeText(activity?.applicationContext, "$unit selected", Toast.LENGTH_SHORT)
-                    .show()
+            when (sharedPrefKey) {
+                "pref_units" -> {
+                    val unit = sharedPref.getString("pref_units", "")
+                    Toast.makeText(
+                        activity?.applicationContext,
+                        "$unit selected",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                "pref_location" -> {
+                    val location = sharedPref.getString("pref_location", "")
+                    Toast.makeText(
+                        activity?.applicationContext,
+                        "$location selected",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
