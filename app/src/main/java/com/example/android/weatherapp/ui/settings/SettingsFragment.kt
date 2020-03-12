@@ -3,6 +3,9 @@ package com.example.android.weatherapp.ui.settings
 import android.os.Bundle
 import androidx.preference.*
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.app.EMPTY_STRING
+import com.example.android.weatherapp.app.KEY_PREF_LOCATION
+import com.example.android.weatherapp.app.KEY_PREF_UNITS
 
 class SettingsFragment : PreferenceFragmentCompat(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -10,8 +13,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.app_preferences, rootKey)
 
-        bindSummaryValue(findPreference("pref_units"))
-        bindSummaryValue(findPreference("pref_location"))
+        bindSummaryValue(findPreference(KEY_PREF_LOCATION))
+        bindSummaryValue(findPreference(KEY_PREF_UNITS))
     }
 
     override fun onPreferenceStartFragment(
@@ -27,7 +30,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 preferenceChangeListener.onPreferenceChange(
                     preference,
                     PreferenceManager.getDefaultSharedPreferences(preference.context)
-                        .getString(preference.key, "")
+                        .getString(preference.key, EMPTY_STRING)
                 )
             }
         }

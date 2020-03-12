@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.app.EMPTY_STRING
+import com.example.android.weatherapp.app.KEY_PREF_LOCATION
+import com.example.android.weatherapp.app.KEY_PREF_UNITS
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
@@ -45,7 +48,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun initSnackBar(view: View) {
-        snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
+        snackbar = Snackbar.make(view, EMPTY_STRING, Snackbar.LENGTH_LONG)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -153,16 +156,16 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         val sharedPrefKey = key ?: ""
         sharedPreferences?.let { sharedPref ->
             when (sharedPrefKey) {
-                "pref_units" -> {
-                    val unit = sharedPref.getString("pref_units", "")
+                KEY_PREF_UNITS -> {
+                    val unit = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING)
                     Toast.makeText(
                         activity?.applicationContext,
                         "$unit selected",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                "pref_location" -> {
-                    val location = sharedPref.getString("pref_location", "")
+                KEY_PREF_LOCATION -> {
+                    val location = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING)
                     Toast.makeText(
                         activity?.applicationContext,
                         "$location selected",
