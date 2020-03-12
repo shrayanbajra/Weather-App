@@ -7,13 +7,15 @@
             android:dialogTitle="Units"
             android:entries="@array/pref_units_entries"
             android:entryValues="@array/pref_units_entry_values"
-            android:summary="%s"
             android:key="pref_units"
+            android:summary="%s"
             android:title="Units" />
 
         <EditTextPreference
-            android:title="Location"
-            android:key="pref_location"/>
+            android:dialogTitle="Enter Location"
+            android:key="pref_location"
+            android:summary="%s"
+            android:title="Location" />
 
     </PreferenceCategory>
 
