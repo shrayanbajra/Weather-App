@@ -23,6 +23,9 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     // TODO: Fix issue for correctly setting up preferences when app is started
 
+    private var units: String = ""
+    private var location: String = ""
+
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
 
@@ -59,7 +62,16 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private fun setupSharedPreferences() {
         val sharedPref = PreferenceManager
             .getDefaultSharedPreferences(activity?.applicationContext)
+        initPreferences(sharedPref)
         sharedPref.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun initPreferences(sharedPref: SharedPreferences) {
+        val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
+        val location = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING).nullToEmpty()
+
+        AppPreferences.LOCATION = location
+        AppPreferences.UNITS = units
     }
 
     private fun observeCurrentWeather() {
@@ -88,8 +100,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun logStatus(it: DataWrapper<WeatherUi>, message: String) {
-        Timber.d(AppPreferences.LOCATION)
-        Timber.d(AppPreferences.UNITS)
+        Timber.d("Location -> $location")
+        Timber.d("Units -> $units")
         Timber.d(message)
         Timber.d("${it.status}")
         Timber.d(it.message)
@@ -159,12 +171,11 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         sharedPreferences?.let { sharedPref ->
             when (sharedPrefKey) {
                 KEY_PREF_UNITS -> {
-                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
+                    units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
                     AppPreferences.UNITS = units
                 }
                 KEY_PREF_LOCATION -> {
-                    val location =
-                        sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING).nullToEmpty()
+                    location = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING).nullToEmpty()
                     AppPreferences.LOCATION = location
                 }
             }

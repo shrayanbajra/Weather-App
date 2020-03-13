@@ -43,7 +43,11 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     is ListPreference -> {
                         val listPreference: ListPreference = preference
                         val index: Int = listPreference.findIndexOfValue(selectedValue)
-                        preference.summary = listPreference.entries[index]
+                        try {
+                            preference.summary = listPreference.entries[index]
+                        } catch (exception: ArrayIndexOutOfBoundsException) {
+                            preference.summary = listPreference.entries[0]
+                        }
                     }
                     is EditTextPreference -> {
                         preference.setSummary(selectedValue)
