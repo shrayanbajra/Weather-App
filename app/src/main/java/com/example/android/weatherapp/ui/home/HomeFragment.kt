@@ -21,8 +21,7 @@ import timber.log.Timber
 
 class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // TODO: Display Location in Settings (Fragment) (will add functionality to change it later)
-    // TODO: Make Network Request according to Units chosen in Settings
+    // TODO: Fix issue for correctly setting up preferences when app is started
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
@@ -89,6 +88,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun logStatus(it: DataWrapper<WeatherUi>, message: String) {
+        Timber.d(AppPreferences.LOCATION)
+        Timber.d(AppPreferences.UNITS)
         Timber.d(message)
         Timber.d("${it.status}")
         Timber.d(it.message)

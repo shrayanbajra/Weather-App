@@ -1,5 +1,6 @@
 package com.example.android.weatherapp.ui
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import androidx.preference.PreferenceManager
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.app.*
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_nav_host.*
 
@@ -22,10 +25,24 @@ class NavHostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav_host)
 
+        initSharedPreferences()
         initToolbar()
         initDrawer()
         initNavController()
         initNavigationView()
+    }
+
+    private fun initSharedPreferences() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        initPreferences(sharedPref)
+    }
+
+    private fun initPreferences(sharedPref: SharedPreferences) {
+        val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
+        val location = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING).nullToEmpty()
+
+        AppPreferences.LOCATION = location
+        AppPreferences.UNITS = units
     }
 
     private fun initToolbar() {
