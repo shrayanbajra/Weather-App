@@ -95,7 +95,9 @@ class HomeRepository private constructor() : BaseRepository() {
     // Network Request
     private suspend fun fetchCurrentWeatherFromNetwork(): WeatherResponse {
         return getNetworkClient().getWeatherResponse(
-            AppPreferences.LOCATION, AppPreferences.UNITS, AppPreferences.API_KEY
+            AppPreferences.LOCATION,
+            AppPreferences.UNITS,
+            AppPreferences.API_KEY
         )
     }
 

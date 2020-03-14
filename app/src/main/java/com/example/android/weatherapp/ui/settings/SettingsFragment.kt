@@ -3,6 +3,7 @@ package com.example.android.weatherapp.ui.settings
 import android.os.Bundle
 import androidx.preference.*
 import com.example.android.weatherapp.R
+import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.app.EMPTY_STRING
 import com.example.android.weatherapp.app.KEY_PREF_LOCATION
 import com.example.android.weatherapp.app.KEY_PREF_UNITS
@@ -42,15 +43,17 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 when (preference) {
                     is ListPreference -> {
                         val listPreference: ListPreference = preference
+                        AppPreferences.UNITS = selectedValue
                         val index: Int = listPreference.findIndexOfValue(selectedValue)
-                        try {
-                            preference.summary = listPreference.entries[index]
-                        } catch (exception: ArrayIndexOutOfBoundsException) {
-                            preference.summary = listPreference.entries[0]
-                        }
+//                        try {
+//                            preference.summary = listPreference.entries[index]
+//                        } catch (exception: ArrayIndexOutOfBoundsException) {
+//                            preference.summary = listPreference.entries[0]
+//                        }
                     }
                     is EditTextPreference -> {
-                        preference.setSummary(selectedValue)
+//                        preference.setSummary(selectedValue)
+                        AppPreferences.LOCATION = selectedValue
                     }
                 }
                 true

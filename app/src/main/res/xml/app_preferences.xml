@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="General">
 
@@ -7,15 +8,15 @@
             android:dialogTitle="Select Units"
             android:entries="@array/pref_units_entries"
             android:entryValues="@array/pref_units_entry_values"
-            android:key="pref_units"
-            android:summary="%s"
-            android:title="Units" />
+            android:key="key_pref_units"
+            android:title="Units"
+            app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:dialogTitle="Enter Location"
-            android:key="pref_location"
-            android:summary="%s"
-            android:title="Location" />
+            android:key="key_pref_location"
+            android:title="Location"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
