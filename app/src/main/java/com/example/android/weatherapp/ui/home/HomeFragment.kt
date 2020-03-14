@@ -24,8 +24,6 @@ import timber.log.Timber
 
 class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // TODO: Fix issue for correctly setting up preferences when app is started
-
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
 
@@ -61,7 +59,18 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun setupSharedPreferences() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+        initPreferences(sharedPref)
         sharedPref.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun initPreferences(sharedPref: SharedPreferences) {
+        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
+        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupSharedPreferences()
     }
 
     private fun observeCurrentWeather() {
