@@ -11,7 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
-import com.example.android.weatherapp.app.*
+import com.example.android.weatherapp.app.AppPreferences
+import com.example.android.weatherapp.app.EMPTY_STRING
+import com.example.android.weatherapp.app.KEY_PREF_LOCATION
+import com.example.android.weatherapp.app.KEY_PREF_UNITS
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
@@ -148,21 +151,22 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun displayData(weatherInfo: WeatherUi) {
         binding.weatherUi = weatherInfo
+        Timber.d("Weather for UI $weatherInfo")
         Glide.with(this)
             .load(weatherInfo.icon)
             .into(binding.imgWeatherIcon)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        val sharedPrefKey = key.nullToEmpty()
+        val sharedPrefKey = key ?: ""
         sharedPreferences?.let { sharedPref ->
             when (sharedPrefKey) {
                 KEY_PREF_UNITS -> {
-                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
+                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
                     Timber.d("Units changed to $units")
                 }
                 KEY_PREF_LOCATION -> {
-                    val location = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).nullToEmpty()
+                    val location = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
                     Timber.d("Location changed to $location")
                 }
             }

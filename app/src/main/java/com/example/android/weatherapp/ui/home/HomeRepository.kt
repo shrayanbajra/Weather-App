@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -82,7 +83,9 @@ class HomeRepository private constructor() : BaseRepository() {
 
     private suspend fun getCurrentWeatherFromDatabase(): WeatherEntity? {
         return withContext(IO) {
-            weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION)
+            val weather = weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION)
+            Timber.d("Current Weather in Database $weather")
+            weather
         }
     }
 

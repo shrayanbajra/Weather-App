@@ -8,13 +8,13 @@
             android:dialogTitle="Select Units"
             android:entries="@array/pref_units_entries"
             android:entryValues="@array/pref_units_entry_values"
-            android:key="key_pref_units"
+            android:key="pref_units"
             android:title="Units"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:dialogTitle="Enter Location"
-            android:key="key_pref_location"
+            android:key="pref_location"
             android:title="Location"
             app:useSimpleSummaryProvider="true" />
 
