@@ -41,20 +41,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
                 val selectedValue = newValue.toString()
 
                 when (preference) {
-                    is ListPreference -> {
-                        val listPreference: ListPreference = preference
-                        AppPreferences.UNITS = selectedValue
-                        val index: Int = listPreference.findIndexOfValue(selectedValue)
-//                        try {
-//                            preference.summary = listPreference.entries[index]
-//                        } catch (exception: ArrayIndexOutOfBoundsException) {
-//                            preference.summary = listPreference.entries[0]
-//                        }
-                    }
-                    is EditTextPreference -> {
-//                        preference.setSummary(selectedValue)
-                        AppPreferences.LOCATION = selectedValue
-                    }
+                    is ListPreference -> AppPreferences.UNITS = selectedValue
+                    is EditTextPreference -> AppPreferences.LOCATION = selectedValue
                 }
                 true
             }

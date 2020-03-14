@@ -171,12 +171,11 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         sharedPreferences?.let { sharedPref ->
             when (sharedPrefKey) {
                 KEY_PREF_UNITS -> {
-                    val units = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
-                    Timber.d("Units changed to $units")
+                    AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
                 }
                 KEY_PREF_LOCATION -> {
-                    val location = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
-                    Timber.d("Location changed to $location")
+                    AppPreferences.LOCATION =
+                        sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
                 }
             }
         }
