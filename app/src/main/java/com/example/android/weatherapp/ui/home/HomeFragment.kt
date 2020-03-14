@@ -64,8 +64,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun initPreferences(sharedPref: SharedPreferences) {
-        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
-        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
+        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
+        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
     }
 
     override fun onResume() {
@@ -175,7 +175,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
                 }
                 KEY_PREF_LOCATION -> {
                     AppPreferences.LOCATION =
-                        sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
+                        sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
                 }
             }
         }
