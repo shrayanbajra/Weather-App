@@ -72,10 +72,4 @@ class HomeViewModel : BaseViewModel() {
             message = entityWrapper.message
         }
     }
-
-    fun deleteAll() {
-        viewModelScope.launch {
-            repository.deleteWeathersFromDatabase()
-        }
-    }
 }
