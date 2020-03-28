@@ -14,11 +14,13 @@
     <string name="generic_name">Hello %s</string>
     <string name="delete_weathers">Delete Weathers</string>
 
+    <string name="pref_units_default_entry">Metric</string>
     <string-array name="pref_units_entries">
         <item>Metric</item>
         <item>Imperial</item>
     </string-array>
 
+    <string name="pref_units_default_value">Metric</string>
     <string-array name="pref_units_entry_values">
         <item>Metric</item>
         <item>Imperial</item>

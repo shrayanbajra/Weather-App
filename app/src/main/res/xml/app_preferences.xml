@@ -5,6 +5,7 @@
     <PreferenceCategory android:title="General">
 
         <ListPreference
+            android:defaultValue="@string/pref_units_default_value"
             android:dialogTitle="Select Units"
             android:entries="@array/pref_units_entries"
             android:entryValues="@array/pref_units_entry_values"
@@ -14,9 +15,9 @@
 
         <EditTextPreference
             android:dialogTitle="Enter Location"
+            android:icon="@drawable/ic_edit_location"
             android:key="pref_location"
             android:title="Location"
-            android:icon="@drawable/ic_edit_location"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
