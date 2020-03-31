@@ -148,7 +148,10 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.delete_weathers -> viewModel.deleteAll()
+            R.id.delete_weathers -> {
+                viewModel.deleteAll()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
