@@ -1,5 +1,6 @@
 package com.example.android.weatherapp.data.remote.response
 
+import com.example.android.weatherapp.data.remote.response.weatherresponsefields.*
 import com.google.gson.annotations.SerializedName
 
 data class WeatherResponse(

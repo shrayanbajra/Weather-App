@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.weatherapp.core.BaseViewModel
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
-import com.example.android.weatherapp.data.ui.WeatherUi
+import com.example.android.weatherapp.data.ui.WeatherUI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -18,7 +18,7 @@ class HomeViewModel : BaseViewModel() {
 
     fun getWeatherLiveData() = transformLiveDataForUI()
 
-    private fun transformLiveDataForUI(): LiveData<DataWrapper<WeatherUi>> {
+    private fun transformLiveDataForUI(): LiveData<DataWrapper<WeatherUI>> {
         return Transformations.map(_weatherEntity, ::transformEntityToUI)
     }
 
@@ -47,8 +47,8 @@ class HomeViewModel : BaseViewModel() {
         Timber.d(exception.localizedMessage ?: "")
     }
 
-    private fun transformEntityToUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
-        val weatherUi = WeatherUi().apply {
+    private fun transformEntityToUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUI> {
+        val weatherUi = WeatherUI().apply {
             Timber.d("Entity in wrapper ${entityWrapper.wrapperBody}")
             entityWrapper.wrapperBody.let { entity ->
                 location = entity?.location ?: ""
@@ -66,8 +66,8 @@ class HomeViewModel : BaseViewModel() {
         return weatherUiWrapper
     }
 
-    private fun prepareWrapperForUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUi> {
-        return DataWrapper<WeatherUi>().apply {
+    private fun prepareWrapperForUI(entityWrapper: DataWrapper<WeatherEntity>): DataWrapper<WeatherUI> {
+        return DataWrapper<WeatherUI>().apply {
             status = entityWrapper.status
             message = entityWrapper.message
         }

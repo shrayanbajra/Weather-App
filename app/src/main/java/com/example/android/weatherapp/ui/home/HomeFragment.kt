@@ -18,7 +18,7 @@ import com.example.android.weatherapp.app.EMPTY_STRING
 import com.example.android.weatherapp.app.KEY_PREF_LOCATION
 import com.example.android.weatherapp.app.KEY_PREF_UNITS
 import com.example.android.weatherapp.data.DataWrapper
-import com.example.android.weatherapp.data.ui.WeatherUi
+import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.utils.NetworkUtils
 import com.google.android.material.snackbar.Snackbar
@@ -94,13 +94,13 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         })
     }
 
-    private fun checkForEmptyState(it: DataWrapper<WeatherUi>): Boolean {
+    private fun checkForEmptyState(it: DataWrapper<WeatherUI>): Boolean {
         return it.wasFailure()
-                && it.wrapperBody == WeatherUi()
+                && it.wrapperBody == WeatherUI()
                 && NetworkUtils.hasNoInternetConnection()
     }
 
-    private fun logStatus(it: DataWrapper<WeatherUi>, message: String) {
+    private fun logStatus(it: DataWrapper<WeatherUI>, message: String) {
         Timber.d("Location -> ${AppPreferences.LOCATION}")
         Timber.d("Units -> ${AppPreferences.UNITS}")
         Timber.d(message)
@@ -119,7 +119,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         setWeatherInformationVisibility(GONE)
     }
 
-    private fun displayCurrentWeather(it: DataWrapper<WeatherUi>) {
+    private fun displayCurrentWeather(it: DataWrapper<WeatherUI>) {
         it.wrapperBody?.let { weatherInfo ->
             logStatus(it, "Inside success")
             displayData(weatherInfo)
@@ -143,7 +143,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         snackbar.show()
     }
 
-    private fun displayData(weatherInfo: WeatherUi) {
+    private fun displayData(weatherInfo: WeatherUI) {
         binding.weatherUi = weatherInfo
         Timber.d("Weather for UI $weatherInfo")
         Glide.with(this)
