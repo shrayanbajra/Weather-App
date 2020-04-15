@@ -77,7 +77,7 @@ class HomeRepository private constructor() : BaseRepository() {
      */
     private suspend fun insertCurrentWeatherIntoDatabase(weatherEntity: WeatherEntity) {
         withContext(IO) {
-            weatherDao.insertCurrentWeatherIntoDatabase(weatherEntity)
+            weatherDao.insertCurrentWeather(weatherEntity)
         }
     }
 
@@ -91,7 +91,7 @@ class HomeRepository private constructor() : BaseRepository() {
 
     suspend fun deleteWeathersFromDatabase() {
         withContext(IO) {
-            weatherDao.deleteWeathersFromDatabase()
+            weatherDao.deleteAll()
         }
     }
 

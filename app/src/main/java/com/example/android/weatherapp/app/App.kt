@@ -10,7 +10,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         AppUtils.init(this)
+
         Stetho.initializeWithDefaults(this)
         Timber.plant(DebugTree())
     }

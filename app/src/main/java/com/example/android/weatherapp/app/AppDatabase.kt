@@ -14,6 +14,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun weatherDao(): WeatherDao
 
     companion object {
+
         // Volatile restricts from creating multiple instances of database in different threads
         @Volatile
         private var instance: AppDatabase? = null

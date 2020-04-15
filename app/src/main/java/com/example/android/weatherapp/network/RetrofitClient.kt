@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 abstract class RetrofitClient {
 
     companion object {
+
         private const val BASE_ADDRESS = "https://api.openweathermap.org/data/2.5/"
         private var instance: API? = null
 

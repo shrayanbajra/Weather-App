@@ -1,7 +1,9 @@
 package com.example.android.weatherapp.app
 
 class AppPreferences {
+
     companion object {
+
         var LOCATION: String = ""
         var UNITS: String = ""  // metric for Celsius and imperial for Fahrenheit
 
