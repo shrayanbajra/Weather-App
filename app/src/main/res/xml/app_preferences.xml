@@ -2,7 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory
+        android:title="General"
+        app:iconSpaceReserved="false">
 
         <ListPreference
             android:defaultValue="@string/pref_units_default_value"
@@ -11,13 +13,14 @@
             android:entryValues="@array/pref_units_entry_values"
             android:key="pref_units"
             android:title="Units"
+            app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:dialogTitle="Enter Location"
-            android:icon="@drawable/ic_edit_location"
             android:key="pref_location"
             android:title="Location"
+            app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
