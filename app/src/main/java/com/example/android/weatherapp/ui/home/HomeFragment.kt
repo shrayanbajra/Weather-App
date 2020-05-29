@@ -29,10 +29,6 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
 
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(HomeViewModel::class.java)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -50,11 +46,16 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         snackbar = Snackbar.make(view, EMPTY_STRING, Snackbar.LENGTH_LONG)
     }
 
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(HomeViewModel::class.java)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         showProgressBar()
         setupSharedPreferences()
+
         observeCurrentWeather()
         refreshCurrentWeather()
     }
@@ -190,7 +191,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun setProgressBarVisibility(visibility: Int) {
-        binding.progressBarHome.visibility = visibility
+        binding.progressBar.visibility = visibility
     }
 
     private fun setWeatherInformationVisibility(visibility: Int) {

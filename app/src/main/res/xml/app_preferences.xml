@@ -17,7 +17,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            android:defaultValue="@string/pref_units_default_entry"
+            android:defaultValue="London"
             android:dialogTitle="Enter Location"
             android:key="pref_location"
             android:title="Location"
