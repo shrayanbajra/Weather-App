@@ -26,6 +26,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     private lateinit var binding: FragmentHomeBinding
     private lateinit var snackbar: Snackbar
 
+    private var lastFetchedTime: Long = 0L
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -53,14 +55,36 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         showProgressBar()
         setupSharedPreferences()
 
-        refreshCurrentWeather()
+        if (requiresRefresh()) {
+            fetchCurrentWeather()
+            updateLastFetchedOnRecord()
+        }
+
+        swipeRefreshListener()
         observeCurrentWeather()
     }
 
+    private fun requiresRefresh(): Boolean {
+        val currentTime = System.currentTimeMillis()
+        val thirtyMinutes = 1800000L
+        return currentTime - lastFetchedTime >= thirtyMinutes
+    }
+
+    private fun getSharedPrefEditor(): SharedPreferences.Editor? {
+        val sharedPref = getSharedPreferences()
+        return sharedPref.edit()
+    }
+
     private fun setupSharedPreferences() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+        val sharedPref = getSharedPreferences()
         initPreferences(sharedPref)
+        lastFetchedTime = getLastFetchedTime(sharedPref)
         sharedPref.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun getLastFetchedTime(sharedPref: SharedPreferences): Long {
+        val startOfJan2020 = 1577816100L
+        return sharedPref.getLong(KEY_LAST_FETCHED_ON, startOfJan2020)
     }
 
     private fun initPreferences(sharedPref: SharedPreferences) {
@@ -124,16 +148,28 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         }
     }
 
-    private fun refreshCurrentWeather() {
+    private fun swipeRefreshListener() {
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
             if (NetworkUtils.hasNoInternetConnection()) {
                 displayNoInternetFeedback()
             } else {
-                showProgressBar()
-                viewModel.updateWeather()
+                fetchCurrentWeather()
+                updateLastFetchedOnRecord()
             }
             binding.swipeRefreshLayoutHome.isRefreshing = false
         }
+    }
+
+    private fun updateLastFetchedOnRecord() {
+        val lastFetchedOn = System.currentTimeMillis()
+        val editor = getSharedPrefEditor()
+        editor?.putLong(KEY_LAST_FETCHED_ON, lastFetchedOn)
+        editor?.apply()
+    }
+
+    private fun fetchCurrentWeather() {
+        showProgressBar()
+        viewModel.updateWeather()
     }
 
     private fun displayNoInternetFeedback() {
@@ -166,9 +202,12 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     override fun onDestroy() {
         super.onDestroy()
-        PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
+        getSharedPreferences()
             .unregisterOnSharedPreferenceChangeListener(this)
     }
+
+    private fun getSharedPreferences() =
+        PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
 
     private fun showProgressBar() {
         setProgressBarVisibility(VISIBLE)
@@ -195,3 +234,4 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         binding.constraintLayoutHome.visibility = visibility
     }
 }
+

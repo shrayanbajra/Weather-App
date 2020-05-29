@@ -6,6 +6,8 @@ package com.example.android.weatherapp.app
 const val KEY_PREF_LOCATION: String = "pref_location"
 const val KEY_PREF_UNITS: String = "pref_units"
 
+const val KEY_LAST_FETCHED_ON: String = "pref_last_fetched_on"
+
 /**
  * Literals
  */
