@@ -80,7 +80,7 @@
                     android:text="@string/please_check_your_internet_connection_and_try_again"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                    android:textColor="@android:color/darker_gray" />
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 

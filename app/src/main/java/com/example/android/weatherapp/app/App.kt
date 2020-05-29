@@ -15,5 +15,6 @@ class App : Application() {
 
         Stetho.initializeWithDefaults(this)
         Timber.plant(DebugTree())
+
     }
 }
