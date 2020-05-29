@@ -7,7 +7,7 @@ import com.example.android.weatherapp.core.BaseViewModel
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUI
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -23,7 +23,7 @@ class HomeViewModel : BaseViewModel() {
     }
 
     fun updateWeather() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(IO) {
             fetchAndUpdateWeather()
         }
     }
