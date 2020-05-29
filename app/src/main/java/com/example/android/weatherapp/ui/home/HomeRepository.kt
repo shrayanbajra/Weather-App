@@ -1,8 +1,6 @@
 package com.example.android.weatherapp.ui.home
 
-import android.content.res.Resources
 import androidx.lifecycle.MutableLiveData
-import com.example.android.weatherapp.R
 import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.core.BaseRepository
 import com.example.android.weatherapp.data.DataWrapper
@@ -99,24 +97,12 @@ class HomeRepository private constructor() : BaseRepository() {
 
     // Network Request
     private suspend fun fetchCurrentWeatherFromNetwork(): WeatherResponse {
-        val location = getLocation()
         return getNetworkClient().getWeatherResponse(
-            location,
+            AppPreferences.LOCATION,
             AppPreferences.UNITS,
             AppPreferences.API_KEY
         )
     }
-
-    private fun getLocation(): String {
-        return if (AppPreferences.LOCATION.isBlank()) {
-            getDefaultLocationValue()
-        } else {
-            AppPreferences.LOCATION
-        }
-    }
-
-    private fun getDefaultLocationValue() =
-        Resources.getSystem().getString(R.string.pref_location_default_value)
 
     private fun transformResponseToEntity(weatherResponse: WeatherResponse?): WeatherEntity {
         val decimalFormat = DecimalFormat("##")

@@ -13,10 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
-import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.app.EMPTY_STRING
-import com.example.android.weatherapp.app.KEY_PREF_LOCATION
-import com.example.android.weatherapp.app.KEY_PREF_UNITS
+import com.example.android.weatherapp.app.*
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
@@ -56,8 +53,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         showProgressBar()
         setupSharedPreferences()
 
-        observeCurrentWeather()
         refreshCurrentWeather()
+        observeCurrentWeather()
     }
 
     private fun setupSharedPreferences() {
@@ -67,8 +64,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private fun initPreferences(sharedPref: SharedPreferences) {
-        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
-        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
+        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
+        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
     }
 
     override fun onResume() {
