@@ -1,6 +1,6 @@
 package com.example.android.weatherapp.network
 
-import com.example.android.weatherapp.data.remote.response.WeatherResponse
+import com.example.android.weatherapp.data.remote.currentweather.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

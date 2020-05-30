@@ -2,10 +2,10 @@ package com.example.android.weatherapp.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.core.BaseRepository
+import com.example.android.weatherapp.baseclass.BaseRepository
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
-import com.example.android.weatherapp.data.remote.response.WeatherResponse
+import com.example.android.weatherapp.data.remote.currentweather.WeatherResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch

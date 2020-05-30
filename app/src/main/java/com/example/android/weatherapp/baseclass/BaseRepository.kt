@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.core
+package com.example.android.weatherapp.baseclass
 
 import com.example.android.weatherapp.app.AppDatabase
 import com.example.android.weatherapp.data.local.WeatherDao

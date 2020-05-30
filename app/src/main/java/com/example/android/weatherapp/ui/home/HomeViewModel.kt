@@ -2,8 +2,8 @@ package com.example.android.weatherapp.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android.weatherapp.core.BaseViewModel
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUI
@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel : ViewModel() {
 
     private val repository = HomeRepository.getInstance()
     private val _weatherEntity = repository.getCurrentWeatherLiveData()

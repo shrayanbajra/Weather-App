@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.data.remote.response.weatherresponsefields
+package com.example.android.weatherapp.data.remote.currentweather.fields
 
 
 import com.google.gson.annotations.SerializedName
