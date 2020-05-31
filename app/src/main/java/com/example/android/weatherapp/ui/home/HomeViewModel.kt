@@ -4,10 +4,7 @@ import androidx.lifecycle.*
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUI
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
@@ -16,17 +13,12 @@ class HomeViewModel : ViewModel() {
 
         var currentWeather = MutableLiveData<DataWrapper<WeatherEntity>>()
 
-        viewModelScope.launch(Main) {
-
-            currentWeather = withContext(Dispatchers.Default) {
-
-                fetchAndUpdateWeather()
-
-            }
-
+        viewModelScope.launch {
+            currentWeather = fetchAndUpdateWeather()
         }
 
         return transformLiveDataForUI(currentWeather)
+
     }
 
     private suspend fun fetchAndUpdateWeather(): MutableLiveData<DataWrapper<WeatherEntity>> {
@@ -37,7 +29,9 @@ class HomeViewModel : ViewModel() {
 
             val repository = HomeRepository.getInstance()
 
+            Timber.d("### Just before fetching ###")
             repository.fetchAndStoreCurrentWeather()
+
             currentWeatherLiveData = repository.getWeatherEntityLiveData()
 
         } catch (exception: Exception) {

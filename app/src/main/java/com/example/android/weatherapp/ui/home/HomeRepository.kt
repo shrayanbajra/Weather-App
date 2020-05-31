@@ -28,6 +28,8 @@ class HomeRepository private constructor() : BaseRepository() {
     suspend fun getWeatherEntityLiveData(message: String = ""): MutableLiveData<DataWrapper<WeatherEntity>> {
 
         val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
+        Timber.d("### Got result from database ###")
+        Timber.d("Weather Entity From DB -> $weatherEntityFromDatabase")
 
         val entityWrapper = if (weatherEntityFromDatabase == null) {
 
@@ -76,6 +78,8 @@ class HomeRepository private constructor() : BaseRepository() {
     suspend fun fetchAndStoreCurrentWeather() {
 
         val weatherResponse = fetchCurrentWeatherFromNetwork()
+        Timber.d("### Data fetched ###")
+        Timber.d("Weather Response -> $weatherResponse")
 
         val weatherEntity = transformResponseToEntity(weatherResponse)
 
@@ -84,6 +88,9 @@ class HomeRepository private constructor() : BaseRepository() {
     }
 
     private suspend fun updateDatabase(weatherEntity: WeatherEntity) {
+
+        Timber.d("### Just before updating database ###")
+        Timber.d("Weather Entity -> $weatherEntity")
 
         deleteWeathersFromDatabase()
         insertCurrentWeatherIntoDatabase(weatherEntity)
