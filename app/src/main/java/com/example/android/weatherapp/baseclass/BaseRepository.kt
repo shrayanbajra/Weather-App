@@ -8,10 +8,14 @@ import com.example.android.weatherapp.network.RetrofitClient
 abstract class BaseRepository {
 
     fun getWeatherDaoInstance(): WeatherDao {
+
         return AppDatabase.getDatabaseInstance().weatherDao()
+
     }
 
     fun getNetworkClient(): API {
+
         return RetrofitClient.getApiInstance()
+
     }
 }
