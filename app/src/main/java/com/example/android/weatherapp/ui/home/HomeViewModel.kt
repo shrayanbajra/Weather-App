@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUI
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -11,17 +12,24 @@ class HomeViewModel : ViewModel() {
 
     fun getCurrentWeather(): LiveData<DataWrapper<WeatherUI>> {
 
-        var currentWeather = MutableLiveData<DataWrapper<WeatherEntity>>()
+        val currentWeather = MutableLiveData<DataWrapper<WeatherEntity>>()
 
-        viewModelScope.launch {
-            currentWeather = fetchAndUpdateWeather()
+        viewModelScope.launch(Main) {
+
+            currentWeather.postValue(fetchAndUpdateWeather())
+
+            Timber.d("### Receiving LiveData with Entity ###")
+            Timber.d("Value -> ${currentWeather.value}")
+
         }
+
+        Timber.d("### Just Before Transforming Entity to UI ###")
 
         return transformLiveDataForUI(currentWeather)
 
     }
 
-    private suspend fun fetchAndUpdateWeather(): MutableLiveData<DataWrapper<WeatherEntity>> {
+    private suspend fun fetchAndUpdateWeather(): DataWrapper<WeatherEntity>? {
 
         var currentWeatherLiveData = MutableLiveData<DataWrapper<WeatherEntity>>()
 
@@ -34,6 +42,9 @@ class HomeViewModel : ViewModel() {
 
             currentWeatherLiveData = repository.getWeatherEntityLiveData()
 
+            Timber.d("### Receiving Entity Inside LiveData ###")
+            Timber.d("Entity -> ${currentWeatherLiveData.value}")
+
         } catch (exception: Exception) {
 
             val wrapperForFailedWeatherUpdate = prepareWrapperForFailedFetch()
@@ -43,7 +54,9 @@ class HomeViewModel : ViewModel() {
 
         } finally {
 
-            return currentWeatherLiveData
+            Timber.d("### Just Before Returning LiveData with Entity ###")
+            Timber.d("Entity -> ${currentWeatherLiveData.value}")
+            return currentWeatherLiveData.value
 
         }
     }
@@ -64,6 +77,8 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun transformLiveDataForUI(weatherEntity: LiveData<DataWrapper<WeatherEntity>>): LiveData<DataWrapper<WeatherUI>> {
+
+        Timber.d("### Transforming Entity to UI ###")
 
         return Transformations.map(weatherEntity, ::transformEntityToUI)
 

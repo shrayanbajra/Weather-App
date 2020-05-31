@@ -41,10 +41,17 @@ class HomeRepository private constructor() : BaseRepository() {
 
         }
 
+        Timber.d("### Prepared Entity Wrapper ###")
+        Timber.d("Entity Wrapper -> $entityWrapper")
+
         val currentWeatherLiveData = MutableLiveData<DataWrapper<WeatherEntity>>()
-        currentWeatherLiveData.postValue(entityWrapper)
+        currentWeatherLiveData.value = entityWrapper
+
+        Timber.d("### Prepared Live Data For Returning ###")
+        Timber.d("Value -> ${currentWeatherLiveData.value}")
 
         return currentWeatherLiveData
+
     }
 
     private fun prepareEntityWrapperForFailure(): DataWrapper<WeatherEntity> {
