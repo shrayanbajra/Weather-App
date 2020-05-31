@@ -66,9 +66,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
         setupSharedPreferences()
 
-        showProgressBar()
-
-        fetchCurrentWeather()
+        getCurrentWeather()
 
         swipeRefreshListener()
 
@@ -174,7 +172,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     private fun swipeRefreshListener() {
 
-        binding.swipeRefreshLayoutHome.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
 
             if (NetworkUtils.hasNoInternetConnection()) {
 
@@ -182,12 +180,11 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
             } else {
 
-                fetchCurrentWeather()
-                updateLastFetchedOnRecord()
+                getCurrentWeather()
 
             }
 
-            binding.swipeRefreshLayoutHome.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
 
         }
     }
@@ -203,7 +200,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     }
 
-    private fun fetchCurrentWeather() {
+    private fun getCurrentWeather() {
 
         showProgressBar()
 
