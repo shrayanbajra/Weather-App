@@ -1,6 +1,5 @@
 package com.example.android.weatherapp.ui.home
 
-import androidx.lifecycle.MutableLiveData
 import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.baseclass.BaseRepository
 import com.example.android.weatherapp.data.DataWrapper
@@ -25,13 +24,13 @@ class HomeRepository private constructor() : BaseRepository() {
     // Dao and LiveData
     private val weatherDao = getWeatherDaoInstance()
 
-    suspend fun getWeatherEntityLiveData(message: String = ""): MutableLiveData<DataWrapper<WeatherEntity>> {
+    suspend fun getWeatherFromDB(message: String = ""): DataWrapper<WeatherEntity> {
 
         val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
         Timber.d("### Got result from database ###")
         Timber.d("Weather Entity From DB -> $weatherEntityFromDatabase")
 
-        val entityWrapper = if (weatherEntityFromDatabase == null) {
+        return if (weatherEntityFromDatabase == null) {
 
             prepareEntityWrapperForFailure()
 
@@ -40,17 +39,6 @@ class HomeRepository private constructor() : BaseRepository() {
             prepareEntityWrapperForSuccess(message, weatherEntityFromDatabase)
 
         }
-
-        Timber.d("### Prepared Entity Wrapper ###")
-        Timber.d("Entity Wrapper -> $entityWrapper")
-
-        val currentWeatherLiveData = MutableLiveData<DataWrapper<WeatherEntity>>()
-        currentWeatherLiveData.value = entityWrapper
-
-        Timber.d("### Prepared Live Data For Returning ###")
-        Timber.d("Value -> ${currentWeatherLiveData.value}")
-
-        return currentWeatherLiveData
 
     }
 

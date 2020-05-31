@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUI
+import com.example.android.weatherapp.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -16,7 +17,23 @@ class HomeViewModel : ViewModel() {
 
         viewModelScope.launch(Main) {
 
-            currentWeather.postValue(fetchAndUpdateWeather())
+            if (NetworkUtils.hasNoInternetConnection()) {
+
+                val repository = HomeRepository.getInstance()
+
+                Timber.d("### Just Before Receiving Weather from Database ###")
+
+                val weatherFromDB = repository.getWeatherFromDB()
+                currentWeather.value = weatherFromDB
+
+                Timber.d("### After Receiving Weather from Database (Offline) ###")
+                Timber.d("Value -> ${currentWeather.value}")
+
+                return@launch
+            }
+
+            val updatedWeather = fetchAndUpdateWeather()
+            currentWeather.postValue(updatedWeather)
 
             Timber.d("### Receiving LiveData with Entity ###")
             Timber.d("Value -> ${currentWeather.value}")
@@ -31,7 +48,7 @@ class HomeViewModel : ViewModel() {
 
     private suspend fun fetchAndUpdateWeather(): DataWrapper<WeatherEntity>? {
 
-        var currentWeatherLiveData = MutableLiveData<DataWrapper<WeatherEntity>>()
+        val currentWeatherLiveData = MutableLiveData<DataWrapper<WeatherEntity>>()
 
         try {
 
@@ -40,7 +57,7 @@ class HomeViewModel : ViewModel() {
             Timber.d("### Just before fetching ###")
             repository.fetchAndStoreCurrentWeather()
 
-            currentWeatherLiveData = repository.getWeatherEntityLiveData()
+            currentWeatherLiveData.value = repository.getWeatherFromDB()
 
             Timber.d("### Receiving Entity Inside LiveData ###")
             Timber.d("Entity -> ${currentWeatherLiveData.value}")

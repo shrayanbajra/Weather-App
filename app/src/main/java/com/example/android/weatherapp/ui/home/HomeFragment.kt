@@ -64,13 +64,11 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
         super.onActivityCreated(savedInstanceState)
 
-        showProgressBar()
         setupSharedPreferences()
 
-        if (requiresRefresh()) {
-            fetchCurrentWeather()
-            updateLastFetchedOnRecord()
-        }
+        showProgressBar()
+
+        fetchCurrentWeather()
 
         swipeRefreshListener()
 
@@ -245,6 +243,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
             }
         }
 
+        Timber.d("Just before returning observer")
         return@Observer
 
     }
