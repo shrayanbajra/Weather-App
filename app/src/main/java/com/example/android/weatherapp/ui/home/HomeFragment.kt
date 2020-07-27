@@ -72,7 +72,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     }
 
-    private fun requiresRefresh(): Boolean {
+    private fun isRefreshRequired(): Boolean {
 
         val currentTime = System.currentTimeMillis()
         val thirtyMinutes = 1800000L
