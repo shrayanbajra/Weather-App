@@ -1,5 +1,7 @@
 package com.example.android.weatherapp.app
 
+import com.example.android.weatherapp.utils.EMPTY_STRING
+
 class AppPreferences {
 
     companion object {

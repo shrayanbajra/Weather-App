@@ -13,11 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
-import com.example.android.weatherapp.app.*
+import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
-import com.example.android.weatherapp.utils.NetworkUtils
+import com.example.android.weatherapp.utils.*
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 

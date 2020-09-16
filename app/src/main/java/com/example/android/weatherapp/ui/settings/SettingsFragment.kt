@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.preference.*
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.app.EMPTY_STRING
-import com.example.android.weatherapp.app.KEY_PREF_LOCATION
-import com.example.android.weatherapp.app.KEY_PREF_UNITS
+import com.example.android.weatherapp.utils.EMPTY_STRING
+import com.example.android.weatherapp.utils.KEY_PREF_LOCATION
+import com.example.android.weatherapp.utils.KEY_PREF_UNITS
 
 class SettingsFragment : PreferenceFragmentCompat(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {

@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.app
+package com.example.android.weatherapp.utils
 
 /**
  * Keys for preferences
