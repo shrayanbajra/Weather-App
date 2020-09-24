@@ -7,24 +7,22 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.app.AppPreferences
+import com.example.android.weatherapp.baseclass.BaseFragment
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.utils.*
-import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
-class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var snackbar: Snackbar
 
     private var lastFetchedTime: Long = 0L
 
@@ -35,7 +33,6 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_home, container, false
         )
-
         return binding.root
 
     }
@@ -43,14 +40,6 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
-        initSnackBar(view)
-
-    }
-
-    private fun initSnackBar(view: View) {
-
-        snackbar = Snackbar.make(view, EMPTY_STRING, Snackbar.LENGTH_LONG)
 
     }
 
@@ -143,12 +132,7 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     }
 
-    private fun displayFailureFeedback(failureMessage: String) {
-
-        snackbar.setText(failureMessage)
-        snackbar.show()
-
-    }
+    private fun displayFailureFeedback(failureMessage: String) = showSnackbar(failureMessage)
 
     private fun displayEmptyState() {
 
@@ -245,12 +229,8 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     }
 
-    private fun displayNoInternetFeedback() {
-
-        snackbar.setText("No Internet Connection!")
-        snackbar.show()
-
-    }
+    private fun displayNoInternetFeedback() =
+        showSnackbar(getString(R.string.no_internet_connection))
 
     private fun displayData(weatherInfo: WeatherUI) {
 

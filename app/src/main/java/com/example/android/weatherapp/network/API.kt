@@ -4,7 +4,6 @@ import com.example.android.weatherapp.data.remote.currentweather.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-// API Endpoints
 interface API {
 
     @Suppress("SpellCheckingInspection")

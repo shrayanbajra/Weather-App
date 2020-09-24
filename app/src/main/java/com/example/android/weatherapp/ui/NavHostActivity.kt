@@ -23,7 +23,7 @@ class NavHostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_nav_host)
 
         initToolbar()
-        initDrawer()
+        initNavDrawer()
         initNavController()
         initNavigationView()
     }
@@ -33,7 +33,7 @@ class NavHostActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
     }
 
-    private fun initDrawer() {
+    private fun initNavDrawer() {
         drawer = findViewById(R.id.drawer_layout)
 
         val toggle = ActionBarDrawerToggle(
@@ -53,8 +53,10 @@ class NavHostActivity : AppCompatActivity() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
+
                 R.id.nav_settings -> navigateToSettingsFragment()
                 else -> false
+
             }
         }
     }
@@ -75,9 +77,13 @@ class NavHostActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+
             drawer.closeDrawer(GravityCompat.START)
+
         } else {
+
             super.onBackPressed()
+
         }
     }
 }

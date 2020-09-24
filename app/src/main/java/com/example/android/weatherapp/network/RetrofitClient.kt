@@ -12,14 +12,16 @@ abstract class RetrofitClient {
         private var instance: API? = null
 
         fun getApiInstance(): API {
-            if (instance == null) {
-                val retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_ADDRESS)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-                instance = retrofit.create(API::class.java)
-            }
+            if (instance == null) instance = initApiInstance()
             return instance!!
+        }
+
+        private fun initApiInstance(): API {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_ADDRESS)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            return retrofit.create(API::class.java)
         }
     }
 }
