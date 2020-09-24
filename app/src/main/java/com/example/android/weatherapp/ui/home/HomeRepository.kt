@@ -7,6 +7,7 @@ import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.remote.currentweather.WeatherResponse
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import timber.log.Timber
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -69,7 +70,7 @@ class HomeRepository private constructor() : BaseRepository() {
 
     }
 
-    @Throws(Exception::class)
+    @Throws(HttpException::class)
     suspend fun fetchAndStoreCurrentWeather() {
 
         val weatherResponse = fetchCurrentWeatherFromNetwork()

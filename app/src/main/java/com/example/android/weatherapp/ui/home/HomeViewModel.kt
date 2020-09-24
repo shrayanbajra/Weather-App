@@ -7,6 +7,7 @@ import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import timber.log.Timber
 
 class HomeViewModel : ViewModel() {
@@ -62,7 +63,7 @@ class HomeViewModel : ViewModel() {
             Timber.d("### Receiving Entity Inside LiveData ###")
             Timber.d("Entity -> ${currentWeatherLiveData.value}")
 
-        } catch (exception: Exception) {
+        } catch (exception: HttpException) {
 
             val wrapperForFailedWeatherUpdate = prepareWrapperForFailedFetch()
             currentWeatherLiveData.postValue(wrapperForFailedWeatherUpdate)
@@ -87,11 +88,7 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    private fun logError(exception: Exception) {
-
-        Timber.d(exception.localizedMessage ?: "")
-
-    }
+    private fun logError(exception: Exception) = Timber.d(exception.localizedMessage ?: "")
 
     private fun transformLiveDataForUI(weatherEntity: LiveData<DataWrapper<WeatherEntity>>): LiveData<DataWrapper<WeatherUI>> {
 

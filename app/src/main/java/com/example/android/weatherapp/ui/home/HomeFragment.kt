@@ -37,17 +37,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    private val viewModel by lazy {
-
-        ViewModelProvider(this).get(HomeViewModel::class.java)
-
-    }
+    private val viewModel by lazy { ViewModelProvider(this).get(HomeViewModel::class.java) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
 
@@ -70,12 +60,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     }
 
-    private fun getSharedPrefEditor(): SharedPreferences.Editor? {
-
-        val sharedPref = getSharedPreferences()
-        return sharedPref.edit()
-
-    }
+    private fun getSharedPrefEditor() = getSharedPreferences().edit()
 
     private fun setupSharedPreferences() {
 
@@ -178,7 +163,6 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         val lastFetchedOn = System.currentTimeMillis()
 
         val editor = getSharedPrefEditor()
-
         editor?.putLong(KEY_LAST_FETCHED_ON, lastFetchedOn)
         editor?.apply()
 
