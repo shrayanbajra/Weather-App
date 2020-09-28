@@ -9,19 +9,19 @@ abstract class RetrofitClient {
     companion object {
 
         private const val BASE_ADDRESS = "https://api.openweathermap.org/data/2.5/"
-        private var instance: API? = null
+        private var instance: OpenWeatherApi? = null
 
-        fun getApiInstance(): API {
+        fun getApiInstance(): OpenWeatherApi {
             if (instance == null) instance = initApiInstance()
             return instance!!
         }
 
-        private fun initApiInstance(): API {
+        private fun initApiInstance(): OpenWeatherApi {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_ADDRESS)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-            return retrofit.create(API::class.java)
+            return retrofit.create(OpenWeatherApi::class.java)
         }
     }
 }

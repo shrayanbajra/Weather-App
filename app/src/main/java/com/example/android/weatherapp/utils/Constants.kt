@@ -18,3 +18,5 @@ const val EMPTY_STRING: String = ""
  */
 const val DEFAULT_LOCATION: String = "London"
 const val DEFAULT_UNITS: String = "Metric"
+
+const val BASE_ADDRESS = "https://api.openweathermap.org/data/2.5/"
