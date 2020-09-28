@@ -2,7 +2,6 @@ package com.example.android.weatherapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -11,9 +10,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.example.android.weatherapp.R
 import com.google.android.material.navigation.NavigationView
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_nav_host.*
 
-class NavHostActivity : AppCompatActivity() {
+class NavHostActivity : DaggerAppCompatActivity() {
 
     private lateinit var drawer: DrawerLayout
     private lateinit var navController: NavController
