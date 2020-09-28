@@ -1,12 +1,10 @@
-package com.example.android.weatherapp.app
+package com.example.android.weatherapp.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.android.weatherapp.data.local.WeatherDao
-import com.example.android.weatherapp.data.local.WeatherEntity
 
 @Database(entities = [WeatherEntity::class], version = 1, exportSchema = false)
-abstract class AppDatabase : RoomDatabase() {
+abstract class WeatherDatabase : RoomDatabase() {
 
     // Returns the WeatherDao object so that we can perform operations on database
     abstract fun weatherDao(): WeatherDao

@@ -2,10 +2,8 @@ package com.example.android.weatherapp.ui.home
 
 import androidx.lifecycle.*
 import com.example.android.weatherapp.data.DataWrapper
-import com.example.android.weatherapp.data.local.WeatherDao
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUI
-import com.example.android.weatherapp.network.OpenWeatherApi
 import com.example.android.weatherapp.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -15,7 +13,7 @@ import javax.inject.Inject
 
 class HomeViewModel
 @Inject
-constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) : ViewModel() {
+constructor(var repository: HomeRepository) : ViewModel() {
 
     fun getCurrentWeather(): LiveData<DataWrapper<WeatherUI>> {
 
@@ -26,8 +24,6 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) : Vi
             if (NetworkUtils.hasNoInternetConnection()) {
 
                 Timber.d("### Just Before Receiving Weather from Database ###")
-
-                val repository = HomeRepository(openWeatherApi, weatherDao)
 
                 val weatherFromDB = repository.getWeatherFromDB()
                 currentWeather.value = weatherFromDB
@@ -57,8 +53,6 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) : Vi
         val currentWeatherLiveData = MutableLiveData<DataWrapper<WeatherEntity>>()
 
         try {
-
-            val repository = HomeRepository(openWeatherApi, weatherDao)
 
             Timber.d("### Just before fetching ###")
             repository.fetchAndStoreCurrentWeather()
