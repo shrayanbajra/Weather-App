@@ -8,4 +8,5 @@ abstract class BaseRepository {
     fun getWeatherDaoInstance() = AppDatabase.getDatabaseInstance().weatherDao()
 
     fun getNetworkClient() = RetrofitClient.getApiInstance()
+
 }

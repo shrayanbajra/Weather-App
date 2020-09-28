@@ -7,20 +7,20 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.baseclass.BaseFragment
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.utils.*
 import timber.log.Timber
 
-class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -30,9 +30,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_home, container, false
-        )
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         return binding.root
 
     }
@@ -117,7 +115,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
 
     }
 
-    private fun displayFailureFeedback(failureMessage: String) = showSnackbar(failureMessage)
+    private fun displayFailureFeedback(failureMessage: String) = showShortSnackbar(failureMessage)
 
     private fun displayEmptyState() {
 
@@ -214,7 +212,7 @@ class HomeFragment : BaseFragment(), SharedPreferences.OnSharedPreferenceChangeL
     }
 
     private fun displayNoInternetFeedback() =
-        showSnackbar(getString(R.string.no_internet_connection))
+        showShortSnackbar(getString(R.string.no_internet_connection))
 
     private fun displayData(weatherInfo: WeatherUI) {
 
