@@ -1,6 +1,6 @@
 package com.example.android.weatherapp.app
 
-import com.example.android.weatherapp.di.DaggerAppComponent
+import com.example.android.weatherapp.di.app.DaggerAppComponent
 import com.example.android.weatherapp.utils.AppUtils
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector

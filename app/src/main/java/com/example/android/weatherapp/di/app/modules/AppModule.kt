@@ -1,5 +1,9 @@
-package com.example.android.weatherapp.di
+package com.example.android.weatherapp.di.app.modules
 
+import android.app.Application
+import androidx.room.Room
+import com.example.android.weatherapp.app.AppDatabase
+import com.example.android.weatherapp.data.local.WeatherDao
 import com.example.android.weatherapp.network.OpenWeatherApi
 import com.example.android.weatherapp.utils.BASE_ADDRESS
 import dagger.Module
@@ -19,6 +23,19 @@ class AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(OpenWeatherApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppDatabase(application: Application): AppDatabase {
+        return Room.databaseBuilder(application, AppDatabase::class.java, "weather_database")
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideWeatherDao(appDatabase: AppDatabase): WeatherDao {
+        return appDatabase.weatherDao()
     }
 
 }

@@ -1,10 +1,11 @@
 package com.example.android.weatherapp.ui.home
 
 import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.baseclass.BaseRepository
 import com.example.android.weatherapp.data.DataWrapper
+import com.example.android.weatherapp.data.local.WeatherDao
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.remote.currentweather.WeatherResponse
+import com.example.android.weatherapp.network.OpenWeatherApi
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -12,34 +13,17 @@ import timber.log.Timber
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class HomeRepository private constructor() : BaseRepository() {
-
-    companion object {
-
-        private var instance: HomeRepository? = null
-
-        fun getInstance() = instance ?: HomeRepository()
-
-    }
-
-    // Dao and LiveData
-    private val weatherDao = getWeatherDaoInstance()
+class HomeRepository
+constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
 
     suspend fun getWeatherFromDB(message: String = ""): DataWrapper<WeatherEntity> {
 
-        val weatherEntityFromDatabase = getCurrentWeatherFromDatabase()
+        val weatherCacheEntity = getCurrentWeatherFromDatabase()
         Timber.d("### Got result from database ###")
-        Timber.d("Weather Entity From DB -> $weatherEntityFromDatabase")
+        Timber.d("Weather Entity From DB -> $weatherCacheEntity")
 
-        return if (weatherEntityFromDatabase == null) {
-
-            prepareEntityWrapperForFailure()
-
-        } else {
-
-            prepareEntityWrapperForSuccess(message, weatherEntityFromDatabase)
-
-        }
+        return if (weatherCacheEntity == null) prepareEntityWrapperForFailure()
+        else prepareEntityWrapperForSuccess(message, weatherCacheEntity)
 
     }
 
@@ -63,9 +47,7 @@ class HomeRepository private constructor() : BaseRepository() {
     ): DataWrapper<WeatherEntity> {
 
         val successEntityWrapper = DataWrapper<WeatherEntity>()
-
         successEntityWrapper.prepareSuccess(message, weatherEntityFromDatabase)
-
         return successEntityWrapper
 
     }
@@ -132,7 +114,7 @@ class HomeRepository private constructor() : BaseRepository() {
 
         return withContext(IO) {
 
-            getNetworkClient().getWeatherResponse(
+            openWeatherApi.getWeatherResponse(
                 AppPreferences.LOCATION,
                 AppPreferences.UNITS,
                 AppPreferences.API_KEY

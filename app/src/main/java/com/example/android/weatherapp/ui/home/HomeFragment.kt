@@ -7,7 +7,6 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
@@ -17,14 +16,20 @@ import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.data.DataWrapper
 import com.example.android.weatherapp.data.ui.WeatherUI
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
+import com.example.android.weatherapp.di.ViewModelProviderFactory
 import com.example.android.weatherapp.utils.*
+import dagger.android.support.DaggerFragment
 import timber.log.Timber
+import javax.inject.Inject
 
-class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var binding: FragmentHomeBinding
 
     private var lastFetchedTime: Long = 0L
+
+    @Inject
+    lateinit var providerFactory: ViewModelProviderFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -35,7 +40,9 @@ class HomeFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
 
     }
 
-    private val viewModel by lazy { ViewModelProvider(this).get(HomeViewModel::class.java) }
+    private val viewModel by lazy {
+        ViewModelProvider(this, providerFactory).get(HomeViewModel::class.java)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
 
