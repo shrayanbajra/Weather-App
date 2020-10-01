@@ -9,7 +9,7 @@
 
         <variable
             name="weatherUi"
-            type="com.example.android.weatherapp.data.ui.WeatherUI" />
+            type="com.example.android.weatherapp.data.ui.WeatherUi" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

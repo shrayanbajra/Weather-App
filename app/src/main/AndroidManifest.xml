@@ -13,9 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.NavHostActivity"
-            android:theme="@style/AppTheme.TransparentTheme">
+        <activity android:name=".ui.NavHostActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -7,14 +7,12 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.example.android.weatherapp.R
 import com.example.android.weatherapp.app.AppPreferences
-import com.example.android.weatherapp.data.DataWrapper
-import com.example.android.weatherapp.data.ui.WeatherUI
+import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.di.ViewModelProviderFactory
 import com.example.android.weatherapp.utils.*
@@ -45,24 +43,14 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
         super.onActivityCreated(savedInstanceState)
 
         setupSharedPreferences()
 
-        getCurrentWeather()
+        if (NetworkUtils.hasNoInternetConnection()) getCachedWeather()
+        else getCurrentWeather()
 
         swipeRefreshListener()
-
-    }
-
-    private fun isRefreshRequired(): Boolean {
-
-        val currentTime = System.currentTimeMillis()
-        val thirtyMinutes = 1800000L
-
-        return currentTime - lastFetchedTime >= thirtyMinutes
-
     }
 
     private fun getSharedPrefEditor() = getSharedPreferences().edit()
@@ -79,52 +67,47 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     private fun getLastFetchedTime(sharedPref: SharedPreferences): Long {
-
         val startOfJan2020 = 1577816100L
-
         return sharedPref.getLong(KEY_LAST_FETCHED_ON, startOfJan2020)
-
     }
 
     private fun initPreferences(sharedPref: SharedPreferences) {
-
         AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
         AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
+    }
+
+    private fun getCachedWeather() {
+        viewModel.getCachedWeather().observe(viewLifecycleOwner, {
+
+            when (it.status) {
+
+                Status.LOADING -> {
+                    showProgressBar()
+                }
+
+                Status.ERROR -> {
+                    showEmptyState()
+                }
+
+                Status.SUCCESS -> {
+                    makeWeatherInfoVisible()
+                    it.data?.let { weatherInfo -> displayCurrentWeather(weatherInfo) }
+                }
+
+            }
+        })
 
     }
 
     override fun onResume() {
-
         super.onResume()
 
         setupSharedPreferences()
-
-    }
-
-    private fun isEmpty(it: DataWrapper<WeatherUI>): Boolean {
-
-        return it.wasFailure() &&
-                it.wrapperBody == WeatherUI() &&
-                NetworkUtils.hasNoInternetConnection()
-
-    }
-
-    private fun logStatus(it: DataWrapper<WeatherUI>, message: String) {
-
-        Timber.d("Location -> ${AppPreferences.LOCATION}")
-        Timber.d("Units -> ${AppPreferences.UNITS}")
-
-        Timber.d(message)
-
-        Timber.d("${it.status}")
-        Timber.d(it.message)
-        Timber.d("${it.wrapperBody}")
-
     }
 
     private fun displayFailureFeedback(failureMessage: String) = showShortSnackbar(failureMessage)
 
-    private fun displayEmptyState() {
+    private fun showEmptyState() {
 
         setEmptyStateVisibility(VISIBLE)
 
@@ -132,97 +115,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
 
     }
 
-    private fun displayCurrentWeather(it: DataWrapper<WeatherUI>) {
-
-        it.wrapperBody?.let { weatherInfo ->
-
-            logStatus(it, "Inside success")
-
-            displayData(weatherInfo)
-
-        }
-
-    }
-
-    private fun swipeRefreshListener() {
-
-        binding.swipeRefreshLayout.setOnRefreshListener {
-
-            if (NetworkUtils.hasNoInternetConnection()) {
-
-                displayNoInternetFeedback()
-
-            } else {
-
-                getCurrentWeather()
-
-            }
-
-            binding.swipeRefreshLayout.isRefreshing = false
-
-        }
-    }
-
-    private fun updateLastFetchedOnRecord() {
-
-        val lastFetchedOn = System.currentTimeMillis()
-
-        val editor = getSharedPrefEditor()
-        editor?.putLong(KEY_LAST_FETCHED_ON, lastFetchedOn)
-        editor?.apply()
-
-    }
-
-    private fun getCurrentWeather() {
-
-        showProgressBar()
-
-        viewModel.getCurrentWeather().observe(viewLifecycleOwner, observer)
-
-    }
-
-    private val observer = Observer<DataWrapper<WeatherUI>> {
-
-        hideProgressBar()
-
-        logStatus(it, "Inside Observer")
-
-        when {
-
-            isEmpty(it) -> {
-
-                logStatus(it, "Inside Empty State")
-
-                displayEmptyState()
-
-            }
-
-            it.wasFailure() -> {
-
-                logStatus(it, "Inside failure")
-
-                setWeatherInformationVisibility(GONE)
-                displayFailureFeedback(it.message)
-
-            }
-
-            else -> {
-
-                displayCurrentWeather(it)
-
-            }
-        }
-
-        Timber.d("Just before returning observer")
-        return@Observer
-
-    }
-
-    private fun displayNoInternetFeedback() =
-        showShortSnackbar(getString(R.string.no_internet_connection))
-
-    private fun displayData(weatherInfo: WeatherUI) {
-
+    private fun displayCurrentWeather(weatherInfo: WeatherUi) {
         Timber.d("Weather for UI $weatherInfo")
 
         binding.weatherUi = weatherInfo
@@ -230,8 +123,44 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
         Glide.with(this)
             .load(weatherInfo.icon)
             .into(binding.imgWeatherIcon)
-
     }
+
+    private fun swipeRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+
+            if (NetworkUtils.hasNoInternetConnection()) displayNoInternetFeedback()
+            else getCurrentWeather()
+
+            binding.swipeRefreshLayout.isRefreshing = false
+
+        }
+    }
+
+    private fun getCurrentWeather() {
+        viewModel.getCurrentWeather().observe(viewLifecycleOwner, { it ->
+
+            when (it.status) {
+
+                Status.LOADING -> {
+                    showProgressBar()
+                }
+
+                Status.ERROR -> {
+                    setWeatherInformationVisibility(GONE)
+                    displayFailureFeedback(it.message ?: "")
+                }
+
+                Status.SUCCESS -> {
+                    makeWeatherInfoVisible()
+                    it.data?.let { displayCurrentWeather(it) }
+                }
+            }
+
+        })
+    }
+
+    private fun displayNoInternetFeedback() =
+        showShortSnackbar(getString(R.string.no_internet_connection))
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
 
@@ -255,11 +184,9 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     override fun onDestroy() {
-
         super.onDestroy()
 
         getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this)
-
     }
 
     private fun getSharedPreferences(): SharedPreferences {
@@ -277,7 +204,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
 
     }
 
-    private fun hideProgressBar() {
+    private fun makeWeatherInfoVisible() {
 
         setWeatherInformationVisibility(VISIBLE)
 

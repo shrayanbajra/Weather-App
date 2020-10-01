@@ -1,6 +1,6 @@
 package com.example.android.weatherapp.data.ui
 
-data class WeatherUI(
+data class WeatherUi(
     var location: String = "",
     var weatherCondition: String = "",
     var weatherDescription: String = "",
