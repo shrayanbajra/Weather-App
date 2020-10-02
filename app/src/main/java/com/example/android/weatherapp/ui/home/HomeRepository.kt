@@ -34,29 +34,40 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
                 AppPreferences.LOCATION, AppPreferences.UNITS, AppPreferences.API_KEY
             )
 
-            if (weatherResponse.isSuccessful) {
+            if (!weatherResponse.isSuccessful) {
+                emit(Resource.error(weatherResponse.message(), null))
+                return@flow
+            }
 
-                val body = weatherResponse.body()
+            val body = weatherResponse.body()
 
-                if (body != null) {
+            if (body == null) {
+                emit(Resource.error("Couldn't get weather information", null))
+                return@flow
+            }
 
-                    updatedDb(body)
-                    val updatedWeather = getUpdatedWeather()
-                    emit(Resource.success(updatedWeather))
+            updateDb(body)
 
-                } else {
-                    emit(Resource.error("Couldn't get weather information", null))
-                }
+            val updatedWeather = getUpdatedWeather()
+            if (updatedWeather == null) {
+                val errorResource = Resource.error(
+                    msg = "Not Found",
+                    data = null
+                )
+                emit(errorResource)
+                return@flow
+            }
 
-            } else emit(Resource.error(weatherResponse.message(), null))
+            emit(Resource.success(updatedWeather))
 
         } catch (ex: HttpException) {
             emit(Resource.error(ex.message(), null))
+            return@flow
         }
 
     }
 
-    private suspend fun updatedDb(body: WeatherResponse) {
+    private suspend fun updateDb(body: WeatherResponse) {
         val cacheEntity = NetworkMapper.transformResponseToEntity(body)
         weatherDao.insertCurrentWeather(cacheEntity)
     }
