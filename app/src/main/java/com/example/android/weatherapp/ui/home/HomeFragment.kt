@@ -177,6 +177,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
                 Status.SUCCESS -> {
                     makeWeatherInfoVisible()
                     it.data?.let { displayCurrentWeather(it) }
+                    showShortSnackbar("Weather information updated")
                 }
             }
 
