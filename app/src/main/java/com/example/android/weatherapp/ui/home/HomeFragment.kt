@@ -17,6 +17,7 @@ import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.di.ViewModelProviderFactory
 import com.example.android.weatherapp.utils.*
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -98,6 +99,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 Status.ERROR -> {
+                    prepareEmptyStateForNoInternetConnection()
                     showEmptyState()
                 }
 
@@ -109,6 +111,14 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
             }
         })
 
+    }
+
+    private fun prepareEmptyStateForNoInternetConnection() {
+        binding.imgEmptyState.setImageResource(R.drawable.img_no_internet_connection)
+        val title = getString(R.string.no_internet_connection)
+        binding.emptyStateDescription.tvEmptyStateDescriptionTitle.text = title
+        val description = getString(R.string.please_check_your_internet_connection_and_try_again)
+        binding.emptyStateDescription.tvEmptyStateDescriptionBody.text = description
     }
 
     override fun onResume() {
@@ -159,7 +169,8 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 Status.ERROR -> {
-                    hideAllViews()
+                    prepareEmptyState(it)
+                    showEmptyState()
                     it.message?.let { msg -> displayFailureFeedback(msg) }
                 }
 
@@ -170,6 +181,13 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
             }
 
         })
+    }
+
+    private fun prepareEmptyState(it: Resource<WeatherUi>) {
+        binding.imgEmptyState.setImageResource(R.drawable.ic_not_found)
+        binding.emptyStateDescription.tvEmptyStateDescriptionTitle.text = it.message
+        val description = "Couldn't find weather information for ${AppPreferences.LOCATION}"
+        binding.emptyStateDescription.tvEmptyStateDescriptionBody.text = description
     }
 
     private fun displayNoInternetFeedback() =

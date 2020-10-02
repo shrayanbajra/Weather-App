@@ -42,13 +42,14 @@
                 android:id="@+id/imgEmptyState"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/no_internet_connection"
-                android:src="@drawable/img_no_internet_connection"
+                android:minHeight="125dp"
+                android:contentDescription="@string/error"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/emptyStateGuidelineEnd"
                 app:layout_constraintStart_toEndOf="@id/emptyStateGuidelineStart"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
+                tools:src="@drawable/img_no_internet_connection"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/emptyStateDescription"
@@ -60,17 +61,17 @@
                 app:layout_constraintStart_toStartOf="@id/imgEmptyState"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.80"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/tvEmptyStateDescriptionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_internet_connection"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:textColor="@android:color/white" />
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    tools:text="@string/no_internet_connection" />
 
                 <TextView
                     android:id="@+id/tvEmptyStateDescriptionBody"
@@ -78,10 +79,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:minLines="2"
-                    android:text="@string/please_check_your_internet_connection_and_try_again"
                     android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                    android:textColor="@android:color/white" />
+                    android:lineSpacingExtra="6dp"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    tools:text="@string/please_check_your_internet_connection_and_try_again" />
 
             </LinearLayout>
 
@@ -96,6 +98,7 @@
                 android:id="@+id/constraintLayoutHome"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
