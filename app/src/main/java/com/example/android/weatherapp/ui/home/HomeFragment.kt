@@ -25,8 +25,6 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
 
     private lateinit var binding: FragmentHomeBinding
 
-    private var lastFetchedTime: Long = 0L
-
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 
@@ -58,35 +56,10 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        setupSharedPreferences()
-
         if (NetworkUtils.hasNoInternetConnection()) getCachedWeather()
         else getCurrentWeather()
 
         swipeRefreshListener()
-    }
-
-    private fun getSharedPrefEditor() = getSharedPreferences().edit()
-
-    private fun setupSharedPreferences() {
-
-        val sharedPref = getSharedPreferences()
-        initPreferences(sharedPref)
-
-        lastFetchedTime = getLastFetchedTime(sharedPref)
-
-        sharedPref.registerOnSharedPreferenceChangeListener(this)
-
-    }
-
-    private fun getLastFetchedTime(sharedPref: SharedPreferences): Long {
-        val startOfJan2020 = 1577816100L
-        return sharedPref.getLong(KEY_LAST_FETCHED_ON, startOfJan2020)
-    }
-
-    private fun initPreferences(sharedPref: SharedPreferences) {
-        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
-        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
     }
 
     private fun getCachedWeather() {
@@ -125,6 +98,20 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
         super.onResume()
 
         setupSharedPreferences()
+    }
+
+    private fun setupSharedPreferences() {
+
+        val sharedPref = getSharedPreferences()
+        initPreferences(sharedPref)
+
+        sharedPref.registerOnSharedPreferenceChangeListener(this)
+
+    }
+
+    private fun initPreferences(sharedPref: SharedPreferences) {
+        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
+        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
     }
 
     private fun displayFailureFeedback(failureMessage: String) = showShortSnackbar(failureMessage)
