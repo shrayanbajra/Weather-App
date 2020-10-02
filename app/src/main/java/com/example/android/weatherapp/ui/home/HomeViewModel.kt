@@ -12,7 +12,6 @@ import com.example.android.weatherapp.utils.Status
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class HomeViewModel
@@ -92,7 +91,5 @@ constructor(var repository: HomeRepository) : ViewModel() {
         val weatherUi = CacheMapper.transformEntityToUi(data)
         return Resource.success(data = weatherUi)
     }
-
-    private fun logError(exception: Exception) = Timber.d(exception.localizedMessage ?: "")
 
 }

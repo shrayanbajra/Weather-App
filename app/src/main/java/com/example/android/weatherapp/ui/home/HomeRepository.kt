@@ -31,29 +31,36 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
 
         try {
             val weatherResponse = openWeatherApi.getWeatherResponse(
-                AppPreferences.LOCATION, AppPreferences.UNITS, AppPreferences.API_KEY
+                location = AppPreferences.LOCATION,
+                units = AppPreferences.UNITS,
+                apiKey = AppPreferences.API_KEY
             )
 
             if (!weatherResponse.isSuccessful) {
-                emit(Resource.error(weatherResponse.message(), null))
+                val errorResource = Resource.error(
+                    msg = weatherResponse.message(),
+                    data = null
+                )
+                emit(errorResource)
                 return@flow
             }
 
             val body = weatherResponse.body()
 
             if (body == null) {
-                emit(Resource.error("Couldn't get weather information", null))
+                val errorResource = Resource.error(
+                    msg = "Couldn't get weather information",
+                    data = null
+                )
+                emit(errorResource)
                 return@flow
             }
 
-            updateDb(body)
+            insertIntoDb(body)
 
             val updatedWeather = getUpdatedWeather()
             if (updatedWeather == null) {
-                val errorResource = Resource.error(
-                    msg = "Not Found",
-                    data = null
-                )
+                val errorResource = Resource.error(msg = "Not Found", data = null)
                 emit(errorResource)
                 return@flow
             }
@@ -67,13 +74,13 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
 
     }
 
-    private suspend fun updateDb(body: WeatherResponse) {
+    private suspend fun insertIntoDb(body: WeatherResponse) {
         val cacheEntity = NetworkMapper.transformResponseToEntity(body)
         weatherDao.insertCurrentWeather(cacheEntity)
     }
 
     private suspend fun getUpdatedWeather(): WeatherEntity? {
-        return weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION)
+        return weatherDao.getCurrentWeatherFor(location = AppPreferences.LOCATION)
     }
 
 }
