@@ -7,16 +7,22 @@ import com.example.android.weatherapp.data.remote.NetworkMapper
 import com.example.android.weatherapp.data.remote.currentweather.WeatherResponse
 import com.example.android.weatherapp.network.OpenWeatherApi
 import com.example.android.weatherapp.utils.Resource
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import timber.log.Timber
 
 class HomeRepository
 constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
 
     suspend fun getCachedWeather(): Resource<WeatherEntity> {
 
-        val cacheEntity = weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION)
+        Timber.d("Getting cache info for ${AppPreferences.LOCATION}")
+        val cacheEntity = withContext(IO) {
+            weatherDao.getCurrentWeatherFor(AppPreferences.LOCATION)
+        }
         return if (cacheEntity != null) Resource.success(cacheEntity)
         else Resource.error(
             msg = "No weather information found for ${AppPreferences.LOCATION}",

@@ -45,6 +45,13 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
         super.onViewCreated(view, savedInstanceState)
 
         hideAllViews()
+        val sharedPref = getSharedPreferences()
+        initPreferences(sharedPref)
+    }
+
+    private fun initPreferences(sharedPref: SharedPreferences) {
+        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
+        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
     }
 
     private fun hideAllViews() {
@@ -97,21 +104,8 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     override fun onResume() {
         super.onResume()
 
-        setupSharedPreferences()
-    }
-
-    private fun setupSharedPreferences() {
-
         val sharedPref = getSharedPreferences()
-        initPreferences(sharedPref)
-
         sharedPref.registerOnSharedPreferenceChangeListener(this)
-
-    }
-
-    private fun initPreferences(sharedPref: SharedPreferences) {
-        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
-        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
     }
 
     private fun displayFailureFeedback(failureMessage: String) = showShortSnackbar(failureMessage)
