@@ -20,11 +20,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onPreferenceStartFragment(
         caller: PreferenceFragmentCompat?, pref: Preference?
-    ): Boolean {
-        return true
-    }
+    ) = true
 
     companion object {
+
         fun bindSummaryValue(preference: Preference?) {
             preference?.let {
                 preference.onPreferenceChangeListener = preferenceChangeListener
@@ -38,8 +37,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
         private val preferenceChangeListener: Preference.OnPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { preference, newValue ->
-                val selectedValue = newValue.toString()
 
+            val selectedValue = newValue.toString()
                 when (preference) {
                     is ListPreference -> AppPreferences.UNITS = selectedValue
                     is EditTextPreference -> AppPreferences.LOCATION = selectedValue

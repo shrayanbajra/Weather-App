@@ -31,10 +31,8 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         return binding.root
-
     }
 
     private val viewModel by lazy {
@@ -111,12 +109,10 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     private fun displayFailureFeedback(failureMessage: String) = showShortSnackbar(failureMessage)
 
     private fun showEmptyState() {
-
         setEmptyStateVisibility(VISIBLE)
 
         setWeatherInformationVisibility(GONE)
         setProgressBarVisibility(GONE)
-
     }
 
     private fun displayCurrentWeather(weatherInfo: WeatherUi) {
@@ -176,12 +172,9 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
         showShortSnackbar(getString(R.string.no_internet_connection))
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-
-        val sharedPrefKey = key ?: ""
-
         sharedPreferences?.let { sharedPref ->
 
-            when (sharedPrefKey) {
+            when (key) {
 
                 KEY_PREF_UNITS -> {
                     AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
@@ -203,45 +196,34 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     private fun getSharedPreferences(): SharedPreferences {
-
         return PreferenceManager.getDefaultSharedPreferences(activity?.applicationContext)
-
     }
 
     private fun showProgressBar() {
-
         setProgressBarVisibility(VISIBLE)
 
         setWeatherInformationVisibility(INVISIBLE)
         setEmptyStateVisibility(GONE)
-
     }
 
     private fun makeWeatherInfoVisible() {
-
         setWeatherInformationVisibility(VISIBLE)
 
         setProgressBarVisibility(GONE)
         setEmptyStateVisibility(GONE)
-
     }
 
     private fun setEmptyStateVisibility(visibility: Int) {
-
         binding.imgEmptyState.visibility = visibility
         binding.emptyStateDescription.visibility = visibility
-
     }
 
     private fun setProgressBarVisibility(visibility: Int) {
-
         binding.progressBar.visibility = visibility
-
     }
 
     private fun setWeatherInformationVisibility(visibility: Int) {
-
         binding.constraintLayoutHome.visibility = visibility
-
     }
+
 }

@@ -35,7 +35,6 @@ class NavHostActivity : DaggerAppCompatActivity() {
 
     private fun initNavDrawer() {
         drawer = findViewById(R.id.drawer_layout)
-
         val toggle = ActionBarDrawerToggle(
             this, drawer, R.string.open_navigation_drawer, R.string.close_navigation_drawer
         )
@@ -76,14 +75,7 @@ class NavHostActivity : DaggerAppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-
-            drawer.closeDrawer(GravityCompat.START)
-
-        } else {
-
-            super.onBackPressed()
-
-        }
+        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
+        else super.onBackPressed()
     }
 }

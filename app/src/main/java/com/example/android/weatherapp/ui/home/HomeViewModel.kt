@@ -26,19 +26,14 @@ constructor(var repository: HomeRepository) : ViewModel() {
         viewModelScope.launch(IO) {
 
             val resource = repository.getCachedWeather()
-
             when {
                 resource.isSuccessful() -> {
-
                     val successResource = getSuccessResource(resource.data!!)
                     cachedWeather.postValue(successResource)
-
                 }
                 resource.status == Status.ERROR -> {
-
                     val errorResource = getErrorResource(resource)
                     cachedWeather.postValue(errorResource)
-
                 }
             }
 
@@ -58,7 +53,6 @@ constructor(var repository: HomeRepository) : ViewModel() {
         viewModelScope.launch(IO) {
 
             repository.getCurrentWeather().collect { resource ->
-
                 when {
                     resource.isSuccessful() -> {
 
@@ -79,7 +73,6 @@ constructor(var repository: HomeRepository) : ViewModel() {
 
                     }
                 }
-
             }
 
         }
