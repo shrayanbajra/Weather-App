@@ -54,7 +54,7 @@ class SingleEventLiveData<T> : MediatorLiveData<T>() {
         override fun onChanged(t: T?) {
             if (pending) {
                 pending = false
-                observer.onChanged(t)
+                t?.let { observer.onChanged(t) }
             }
         }
 

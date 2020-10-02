@@ -4,7 +4,7 @@ import com.example.android.weatherapp.data.ui.WeatherUi
 
 object CacheMapper {
 
-    fun transformEntityToUI(cacheEntity: WeatherEntity): WeatherUi {
+    fun transformEntityToUi(cacheEntity: WeatherEntity): WeatherUi {
 
         return WeatherUi().apply {
 

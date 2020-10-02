@@ -42,6 +42,18 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
         ViewModelProvider(this, providerFactory).get(HomeViewModel::class.java)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        hideAllViews()
+    }
+
+    private fun hideAllViews() {
+        setEmptyStateVisibility(GONE)
+        setProgressBarVisibility(GONE)
+        setWeatherInformationVisibility(GONE)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -112,6 +124,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
         setEmptyStateVisibility(VISIBLE)
 
         setWeatherInformationVisibility(GONE)
+        setProgressBarVisibility(GONE)
 
     }
 
@@ -146,8 +159,8 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 Status.ERROR -> {
-                    setWeatherInformationVisibility(GONE)
-                    displayFailureFeedback(it.message ?: "")
+                    hideAllViews()
+                    it.message?.let { msg -> displayFailureFeedback(msg) }
                 }
 
                 Status.SUCCESS -> {

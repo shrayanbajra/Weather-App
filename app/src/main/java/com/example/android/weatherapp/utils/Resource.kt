@@ -16,6 +16,9 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
         }
 
     }
+
+    fun isSuccessful() = this.status == Status.SUCCESS && this.data != null
+
 }
 
 enum class Status {

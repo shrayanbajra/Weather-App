@@ -44,23 +44,23 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/no_internet_connection"
                 android:src="@drawable/img_no_internet_connection"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/emptyStateGuidelineEnd"
                 app:layout_constraintStart_toEndOf="@id/emptyStateGuidelineStart"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/emptyStateDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/imgEmptyState"
                 app:layout_constraintStart_toStartOf="@id/imgEmptyState"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.80">
+                app:layout_constraintVertical_bias="0.80"
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvEmptyStateDescriptionTitle"
