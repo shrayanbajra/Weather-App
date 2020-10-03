@@ -53,25 +53,26 @@ class NavHostActivity : DaggerAppCompatActivity() {
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
 
-                R.id.nav_settings -> navigateToSettingsFragment()
+                R.id.nav_settings -> {
+                    if (isDestinationValid(R.id.settingsFragment)) {
+                        navigateToSettingsFragment()
+                        true
+                    } else
+                        false
+                }
                 else -> false
 
             }
         }
     }
 
-    private fun navigateToSettingsFragment(): Boolean {
-        var isValidDestination = false
-        if (isDestinationValid(R.id.settingsFragment)) {
-            navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-            drawer.closeDrawer(GravityCompat.START)
-            isValidDestination = true
-        }
-        return isValidDestination
-    }
-
     private fun isDestinationValid(destination: Int): Boolean {
         return destination != navController.currentDestination?.id
+    }
+
+    private fun navigateToSettingsFragment() {
+        navController.navigate(R.id.action_homeFragment_to_settingsFragment)
+        drawer.closeDrawer(GravityCompat.START)
     }
 
     override fun onBackPressed() {
