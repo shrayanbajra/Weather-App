@@ -27,18 +27,17 @@ class SettingsFragment : PreferenceFragmentCompat(),
         fun bindSummaryValue(preference: Preference?) {
             preference?.let {
                 preference.onPreferenceChangeListener = preferenceChangeListener
-                preferenceChangeListener.onPreferenceChange(
-                    preference,
-                    PreferenceManager.getDefaultSharedPreferences(preference.context)
-                        .getString(preference.key, EMPTY_STRING)
-                )
+                val newValue = PreferenceManager
+                    .getDefaultSharedPreferences(preference.context)
+                    .getString(preference.key, EMPTY_STRING)
+                preferenceChangeListener.onPreferenceChange(preference, newValue)
             }
         }
 
         private val preferenceChangeListener: Preference.OnPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { preference, newValue ->
 
-            val selectedValue = newValue.toString()
+                val selectedValue = newValue.toString()
                 when (preference) {
                     is ListPreference -> AppPreferences.UNITS = selectedValue
                     is EditTextPreference -> AppPreferences.LOCATION = selectedValue
