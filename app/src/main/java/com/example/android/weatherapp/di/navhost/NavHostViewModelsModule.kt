@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.di.home
+package com.example.android.weatherapp.di.navhost
 
 import androidx.lifecycle.ViewModel
 import com.example.android.weatherapp.di.ViewModelKey
@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-abstract class HomeViewModelsModule {
+abstract class NavHostViewModelsModule {
 
     @Binds
     @IntoMap
