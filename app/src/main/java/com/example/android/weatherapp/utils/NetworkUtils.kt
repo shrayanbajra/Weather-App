@@ -8,10 +8,10 @@ import android.net.NetworkInfo
 
 object NetworkUtils {
 
-    fun hasNoInternetConnection(): Boolean {
+    fun hasNoInternetConnection(context: Context): Boolean {
 
         val connectivityManager =
-            AppUtils.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
 
         return activeNetwork?.isConnectedOrConnecting != true

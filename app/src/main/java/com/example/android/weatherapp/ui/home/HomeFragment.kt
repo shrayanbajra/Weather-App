@@ -61,7 +61,8 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if (NetworkUtils.hasNoInternetConnection()) getCachedWeather()
+        val hasNoInternet = NetworkUtils.hasNoInternetConnection(requireContext())
+        if (hasNoInternet) getCachedWeather()
         else getCurrentWeather()
 
         swipeRefreshListener()
@@ -128,7 +129,8 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     private fun swipeRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
 
-            if (NetworkUtils.hasNoInternetConnection()) displayNoInternetFeedback()
+            val hasNoInternet = NetworkUtils.hasNoInternetConnection(requireContext())
+            if (hasNoInternet) displayNoInternetFeedback()
             else getCurrentWeather()
 
             binding.swipeRefreshLayout.isRefreshing = false

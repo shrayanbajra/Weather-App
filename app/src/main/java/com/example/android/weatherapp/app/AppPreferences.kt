@@ -1,5 +1,6 @@
 package com.example.android.weatherapp.app
 
+import com.example.android.weatherapp.BuildConfig
 import com.example.android.weatherapp.utils.EMPTY_STRING
 
 class AppPreferences {
@@ -9,6 +10,6 @@ class AppPreferences {
         var LOCATION: String = EMPTY_STRING
         var UNITS: String = EMPTY_STRING  // metric for Celsius and imperial for Fahrenheit
 
-        const val API_KEY = "cedb0bc4eeb308672d3377ecf12724e9"
+        const val API_KEY = BuildConfig.API_KEY
     }
 }
