@@ -42,14 +42,14 @@
                 android:id="@+id/imgEmptyState"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minHeight="125dp"
                 android:contentDescription="@string/error"
+                android:minHeight="125dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/emptyStateGuidelineEnd"
                 app:layout_constraintStart_toEndOf="@id/emptyStateGuidelineStart"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/img_no_internet_connection"
-                tools:visibility="visible" />
+                tools:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/emptyStateDescription"
@@ -61,7 +61,7 @@
                 app:layout_constraintStart_toStartOf="@id/imgEmptyState"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.80"
-                tools:visibility="visible">
+                tools:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvEmptyStateDescriptionTitle"
@@ -69,8 +69,8 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textSize="16sp"
                     android:textColor="@android:color/white"
+                    android:textSize="16sp"
                     tools:text="@string/no_internet_connection" />
 
                 <TextView
@@ -78,11 +78,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="6dp"
                     android:minLines="2"
                     android:textAlignment="center"
-                    android:lineSpacingExtra="6dp"
-                    android:textSize="14sp"
                     android:textColor="@android:color/white"
+                    android:textSize="14sp"
                     tools:text="@string/please_check_your_internet_connection_and_try_again" />
 
             </LinearLayout>
@@ -98,7 +98,7 @@
                 android:id="@+id/constraintLayoutHome"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,15 +121,17 @@
                 <TextView
                     android:id="@+id/tvWeatherCondition"
                     style="@style/colorStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:text="@={weatherUi.weatherCondition}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     app:layout_constraintBottom_toBottomOf="@id/imgWeatherIcon"
-                    app:layout_constraintLeft_toRightOf="@id/imgWeatherIcon"
+                    app:layout_constraintEnd_toEndOf="@id/tvMaxTemp"
+                    app:layout_constraintHorizontal_bias="0.00"
+                    app:layout_constraintStart_toEndOf="@id/imgWeatherIcon"
                     app:layout_constraintTop_toTopOf="@id/imgWeatherIcon"
-                    tools:text="Clear" />
+                    tools:text="Thunderstorm" />
 
                 <TextView
                     android:id="@+id/tvMinTemp"
