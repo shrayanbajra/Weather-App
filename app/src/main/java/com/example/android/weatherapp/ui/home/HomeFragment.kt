@@ -71,22 +71,20 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     private fun getCachedWeather() {
         viewModel.getCachedWeather().observe(viewLifecycleOwner, {
 
-            when (it.status) {
-
-                Status.LOADING -> {
+            when {
+                it.isLoading() -> {
                     showProgressBar()
                 }
 
-                Status.ERROR -> {
+                it.isFailure() -> {
                     prepareEmptyStateForNoInternetConnection()
                     showEmptyState()
                 }
 
-                Status.SUCCESS -> {
+                it.isSuccessful() -> {
                     makeWeatherInfoVisible()
                     it.data?.let { weatherInfo -> displayCurrentWeather(weatherInfo) }
                 }
-
             }
         })
 
@@ -141,19 +139,18 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     private fun getCurrentWeather() {
         viewModel.getCurrentWeather().observe(viewLifecycleOwner, { it ->
 
-            when (it.status) {
-
-                Status.LOADING -> {
+            when {
+                it.isLoading() -> {
                     showProgressBar()
                 }
 
-                Status.ERROR -> {
+                it.isFailure() -> {
                     prepareEmptyState(it)
                     showEmptyState()
                     it.message?.let { msg -> displayFailureFeedback(msg) }
                 }
 
-                Status.SUCCESS -> {
+                it.isSuccessful() -> {
                     makeWeatherInfoVisible()
                     it.data?.let { displayCurrentWeather(it) }
                     showShortSnackbar("Weather information updated")

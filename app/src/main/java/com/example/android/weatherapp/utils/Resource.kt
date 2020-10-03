@@ -1,6 +1,9 @@
 package com.example.android.weatherapp.utils
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+
+    enum class Status { SUCCESS, ERROR, LOADING }
+
     companion object {
 
         fun <T> success(data: T?): Resource<T> {
@@ -18,11 +21,7 @@ data class Resource<out T>(val status: Status, val data: T?, val message: String
     }
 
     fun isSuccessful() = this.status == Status.SUCCESS && this.data != null
+    fun isFailure() = this.status == Status.ERROR
+    fun isLoading() = this.status == Status.LOADING
 
-}
-
-enum class Status {
-    SUCCESS,
-    ERROR,
-    LOADING
 }

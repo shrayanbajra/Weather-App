@@ -8,7 +8,6 @@ import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.utils.Resource
 import com.example.android.weatherapp.utils.SingleEventLiveData
-import com.example.android.weatherapp.utils.Status
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ constructor(var repository: HomeRepository) : ViewModel() {
                     val successResource = getSuccessResource(resource.data!!)
                     cachedWeather.postValue(successResource)
                 }
-                resource.status == Status.ERROR -> {
+                resource.isFailure() -> {
                     val errorResource = getErrorResource(resource)
                     cachedWeather.postValue(errorResource)
                 }
@@ -60,13 +59,13 @@ constructor(var repository: HomeRepository) : ViewModel() {
                         currentWeather.postValue(successResource)
 
                     }
-                    resource.status == Status.LOADING -> {
+                    resource.isLoading() -> {
 
                         val loadingResource = Resource.loading(null)
                         currentWeather.postValue(loadingResource)
 
                     }
-                    resource.status == Status.ERROR -> {
+                    resource.isFailure() -> {
 
                         val errorResource = resource.message?.let { Resource.error(msg = it, null) }
                         currentWeather.postValue(errorResource)
