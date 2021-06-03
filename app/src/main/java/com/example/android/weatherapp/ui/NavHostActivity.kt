@@ -53,6 +53,14 @@ class NavHostActivity : DaggerAppCompatActivity() {
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
 
+                R.id.nav_home -> {
+                    if (isDestinationValid(R.id.homeFragment)) {
+                        navigateToHomeFragment()
+                        true
+                    } else
+                        false
+                }
+
                 R.id.nav_settings -> {
                     if (isDestinationValid(R.id.settingsFragment)) {
                         navigateToSettingsFragment()
@@ -60,6 +68,7 @@ class NavHostActivity : DaggerAppCompatActivity() {
                     } else
                         false
                 }
+
                 else -> false
 
             }
@@ -68,6 +77,11 @@ class NavHostActivity : DaggerAppCompatActivity() {
 
     private fun isDestinationValid(destination: Int): Boolean {
         return destination != navController.currentDestination?.id
+    }
+
+    private fun navigateToHomeFragment() {
+        navController.navigate(R.id.homeFragment)
+        drawer.closeDrawer(GravityCompat.START)
     }
 
     private fun navigateToSettingsFragment() {
