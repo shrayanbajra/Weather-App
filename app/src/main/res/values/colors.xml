@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorPrimaryLight">#C5CAE9</color>
@@ -8,4 +9,14 @@
     <color name="colorSecondaryText">#757575</color>
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
+
+    <color name="primary">#303f9f</color>
+    <color name="primaryLight">#666ad1</color>
+    <color name="primaryDark">#001970</color>
+    <color name="secondary">#ff4081</color>
+    <color name="secondaryLight">#ff79b0</color>
+    <color name="secondaryDark">#c60055</color>
+    <color name="primaryText">#ffffff</color>
+    <color name="secondaryText">#fafafa</color>
+
 </resources>

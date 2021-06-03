@@ -30,7 +30,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         return binding.root
     }
