@@ -1,96 +1,52 @@
 package com.example.android.weatherapp.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.android.weatherapp.R
-import com.google.android.material.navigation.NavigationView
+import com.example.android.weatherapp.databinding.ActivityNavHostBinding
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_nav_host.*
 
 class NavHostActivity : DaggerAppCompatActivity() {
 
-    private lateinit var drawer: DrawerLayout
-    private lateinit var navController: NavController
+    private var binding: ActivityNavHostBinding? = null
+    private val mBinding get() = binding!!
+
+    private val navController: NavController by lazy { findNavController(R.id.nav_host_fragment) }
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nav_host)
+        binding = ActivityNavHostBinding.inflate(layoutInflater)
+        val view = binding!!.root
+        setContentView(view)
 
-        initToolbar()
-        initNavDrawer()
-        initNavController()
-        initNavigationView()
-    }
-
-    private fun initToolbar() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-    }
-
-    private fun initNavDrawer() {
-        drawer = findViewById(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, R.string.open_navigation_drawer, R.string.close_navigation_drawer
+        setSupportActionBar(mBinding.toolbar)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.homeFragment, R.id.settingsFragment), mBinding.drawerLayout
         )
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
-    }
 
-    private fun initNavController() {
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this, navController, drawer)
-        NavigationUI.setupWithNavController(toolbar, navController, drawer)
-    }
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        mBinding.navView.setupWithNavController(navController)
 
-    private fun initNavigationView() {
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener {
-            when (it.itemId) {
-
-                R.id.nav_home -> {
-                    if (isDestinationValid(R.id.homeFragment)) {
-                        navigateToHomeFragment()
-                        true
-                    } else
-                        false
-                }
-
-                R.id.nav_settings -> {
-                    if (isDestinationValid(R.id.settingsFragment)) {
-                        navigateToSettingsFragment()
-                        true
-                    } else
-                        false
-                }
-
-                else -> false
-
-            }
-        }
-    }
-
-    private fun isDestinationValid(destination: Int): Boolean {
-        return destination != navController.currentDestination?.id
-    }
-
-    private fun navigateToHomeFragment() {
-        navController.navigate(R.id.homeFragment)
-        drawer.closeDrawer(GravityCompat.START)
-    }
-
-    private fun navigateToSettingsFragment() {
-        navController.navigate(R.id.action_homeFragment_to_settingsFragment)
-        drawer.closeDrawer(GravityCompat.START)
     }
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START)
-        else super.onBackPressed()
+        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
 }
