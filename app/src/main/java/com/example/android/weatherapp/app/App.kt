@@ -9,8 +9,16 @@ import timber.log.Timber.DebugTree
 
 class App : DaggerApplication() {
 
+    companion object {
+
+        lateinit var instance: App
+
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        instance = this
 
         Stetho.initializeWithDefaults(this)
         Timber.plant(DebugTree())

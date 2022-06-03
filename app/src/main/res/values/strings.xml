@@ -33,4 +33,5 @@
     <string name="couldnt_get_weather_information">Couldn\'t get weather information</string>
     <string name="not_found">Not Found</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="no_weather_information_found_for_location">No weather information found for %s</string>
 </resources>
