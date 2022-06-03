@@ -164,7 +164,9 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     private fun prepareEmptyState(it: Resource<WeatherUi>) {
         binding.imgEmptyState.setImageResource(R.drawable.ic_not_found)
         binding.emptyStateDescription.tvEmptyStateDescriptionTitle.text = it.message
-        val description = "Couldn't find weather information for ${AppPreferences.LOCATION}"
+        val description = getString(
+            R.string.couldnt_find_weather_information_for_location, AppPreferences.LOCATION
+        )
         binding.emptyStateDescription.tvEmptyStateDescriptionBody.text = description
     }
 
