@@ -10,11 +10,12 @@
       <map>
         <entry key="app/src/main/res/layout/activity_nav_host.xml" value="0.12056737588652482" />
         <entry key="app/src/main/res/layout/content_host.xml" value="0.12056737588652482" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.1" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.12056737588652482" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.2441025641025641" />
         <entry key="app/src/main/res/menu/home_menu.xml" value="0.23425925925925925" />
+        <entry key="app/src/main/res/xml/app_preferences.xml" value="0.12056737588652482" />
       </map>
     </option>
   </component>
