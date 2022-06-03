@@ -1,5 +1,7 @@
 package com.example.android.weatherapp.ui.home
 
+import android.content.res.Resources
+import com.example.android.weatherapp.R
 import com.example.android.weatherapp.app.AppPreferences
 import com.example.android.weatherapp.data.local.WeatherDao
 import com.example.android.weatherapp.data.local.WeatherEntity
@@ -16,6 +18,8 @@ import timber.log.Timber
 
 class HomeRepository
 constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
+
+    private val resources by lazy { Resources.getSystem() }
 
     suspend fun getCachedWeather(): Resource<WeatherEntity> {
 
@@ -53,9 +57,11 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
 
             val body = weatherResponse.body()
 
+            resources.getString(R.string.couldnt_get_weather_information)
+
             if (body == null) {
                 val errorResource = Resource.error(
-                    msg = "Couldn't get weather information",
+                    msg = resources.getString(R.string.couldnt_get_weather_information),
                     data = null
                 )
                 emit(errorResource)
@@ -66,7 +72,10 @@ constructor(var openWeatherApi: OpenWeatherApi, var weatherDao: WeatherDao) {
 
             val updatedWeather = getUpdatedWeather()
             if (updatedWeather == null) {
-                val errorResource = Resource.error(msg = "Not Found", data = null)
+                val errorResource = Resource.error(
+                    msg = resources.getString(R.string.not_found),
+                    data = null
+                )
                 emit(errorResource)
                 return@flow
             }

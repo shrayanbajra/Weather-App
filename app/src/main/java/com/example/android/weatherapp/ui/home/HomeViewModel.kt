@@ -1,8 +1,10 @@
 package com.example.android.weatherapp.ui.home
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.weatherapp.R
 import com.example.android.weatherapp.data.local.CacheMapper
 import com.example.android.weatherapp.data.local.WeatherEntity
 import com.example.android.weatherapp.data.ui.WeatherUi
@@ -16,6 +18,8 @@ import javax.inject.Inject
 class HomeViewModel
 @Inject
 constructor(var repository: HomeRepository) : ViewModel() {
+
+    private val resources by lazy { Resources.getSystem() }
 
     fun getCachedWeather(): LiveData<Resource<WeatherUi>> {
 
@@ -42,7 +46,7 @@ constructor(var repository: HomeRepository) : ViewModel() {
     }
 
     private fun getErrorResource(resource: Resource<WeatherEntity>): Resource<Nothing> {
-        val errorMessage = resource.message ?: "Something went wrong"
+        val errorMessage = resource.message ?: resources.getString(R.string.something_went_wrong)
         return Resource.error(msg = errorMessage, data = null)
     }
 
