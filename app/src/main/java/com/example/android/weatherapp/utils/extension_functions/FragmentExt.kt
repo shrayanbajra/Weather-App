@@ -1,4 +1,4 @@
-package com.example.android.weatherapp.utils
+package com.example.android.weatherapp.utils.extension_functions
 
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment

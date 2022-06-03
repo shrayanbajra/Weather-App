@@ -16,6 +16,8 @@ import com.example.android.weatherapp.data.ui.WeatherUi
 import com.example.android.weatherapp.databinding.FragmentHomeBinding
 import com.example.android.weatherapp.di.ViewModelProviderFactory
 import com.example.android.weatherapp.utils.*
+import com.example.android.weatherapp.utils.extension_functions.getEmptyIfNull
+import com.example.android.weatherapp.utils.extension_functions.showShortSnackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import timber.log.Timber
