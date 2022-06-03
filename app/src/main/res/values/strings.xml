@@ -29,4 +29,8 @@
     <string name="please_check_your_internet_connection_and_try_again">Please Check Your Internet Connection And Try Again</string>
     <string name="error">Error</string>
     <string name="home">Home</string>
+    <string name="weather_information_updated">Weather information updated</string>
+    <string name="couldnt_get_weather_information">Couldn\'t get weather information</string>
+    <string name="not_found">Not Found</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

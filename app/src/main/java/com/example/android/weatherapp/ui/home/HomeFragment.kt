@@ -69,7 +69,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     private fun getCachedWeather() {
-        viewModel.getCachedWeather().observe(viewLifecycleOwner, {
+        viewModel.getCachedWeather().observe(viewLifecycleOwner) {
 
             when {
                 it.isLoading() -> {
@@ -86,7 +86,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
                     it.data?.let { weatherInfo -> displayCurrentWeather(weatherInfo) }
                 }
             }
-        })
+        }
 
     }
 
@@ -137,7 +137,7 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     private fun getCurrentWeather() {
-        viewModel.getCurrentWeather().observe(viewLifecycleOwner, { it ->
+        viewModel.getCurrentWeather().observe(viewLifecycleOwner) { it ->
 
             when {
                 it.isLoading() -> {
@@ -153,11 +153,11 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
                 it.isSuccessful() -> {
                     makeWeatherInfoVisible()
                     it.data?.let { displayCurrentWeather(it) }
-                    showShortSnackbar("Weather information updated")
+                    showShortSnackbar(R.string.weather_information_updated)
                 }
             }
 
-        })
+        }
     }
 
     private fun prepareEmptyState(it: Resource<WeatherUi>) {
