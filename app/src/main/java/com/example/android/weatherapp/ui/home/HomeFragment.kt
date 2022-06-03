@@ -48,8 +48,9 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
     }
 
     private fun initPreferences(sharedPref: SharedPreferences) {
-        AppPreferences.LOCATION = sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION) ?: ""
-        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS) ?: ""
+        AppPreferences.LOCATION =
+            sharedPref.getString(KEY_PREF_LOCATION, DEFAULT_LOCATION).getEmptyIfNull()
+        AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, DEFAULT_UNITS).getEmptyIfNull()
     }
 
     private fun hideAllViews() {
@@ -176,12 +177,13 @@ class HomeFragment : DaggerFragment(), SharedPreferences.OnSharedPreferenceChang
             when (key) {
 
                 KEY_PREF_UNITS -> {
-                    AppPreferences.UNITS = sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING) ?: ""
+                    AppPreferences.UNITS =
+                        sharedPref.getString(KEY_PREF_UNITS, EMPTY_STRING).getEmptyIfNull()
                 }
 
                 KEY_PREF_LOCATION -> {
                     AppPreferences.LOCATION =
-                        sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING) ?: ""
+                        sharedPref.getString(KEY_PREF_LOCATION, EMPTY_STRING).getEmptyIfNull()
                 }
 
             }
